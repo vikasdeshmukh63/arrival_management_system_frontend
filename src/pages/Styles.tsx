@@ -1,23 +1,23 @@
 import { CustomPagination } from '@/components/mycomponents/CustomPagination'
-import SizeDrawer from '@/components/mycomponents/drawers/SizeDrawer'
+import StyleDrawer from '@/components/mycomponents/drawers/StyleDrawer'
 import { FilterToolbar } from '@/components/mycomponents/FilterToolbar'
 import LoaderComponent from '@/components/mycomponents/Loader'
 import NoData from '@/components/mycomponents/NoData'
 import PageHeader from '@/components/mycomponents/PageHeader'
-import SizeCard from '@/components/mycomponents/SizeCard'
+import StyleCard from '@/components/mycomponents/StyleCard'
 import Layout from '@/components/mycomponents/wrappers/Layout'
-import { useSizes } from '@/hooks/useSizes'
-import { CreateSize, Size } from '@/lib/size'
+import { useStyles } from '@/hooks/useStyles'
+import { CreateStyle, Style } from '@/lib/style'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
-const Sizes = () => {
+const Styles = () => {
     const [searchParams] = useSearchParams()
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-    const [sizeToEdit, setSizeToEdit] = useState<CreateSize | null>(null)
+    const [styleToEdit, setStyleToEdit] = useState<CreateStyle | null>(null)
 
-    const { data, isLoading, isError } = useSizes({
+    const { data, isLoading, isError } = useStyles({
         page: parseInt(searchParams.get('page') || '1'),
         itemsPerPage: parseInt(searchParams.get('itemsPerPage') || '10'),
         search: searchParams.get('search') || undefined,
@@ -32,15 +32,15 @@ const Sizes = () => {
 
     const handleOpenCreateDrawer = () => {
         setIsDrawerOpen(true)
-        setSizeToEdit(null)
+        setStyleToEdit(null)
     }
 
-    const handleOpenEditDrawer = (size: Size) => {
-        const sizeToEdit: CreateSize & { size_id: number } = {
-            size_id: size.size_id,
-            name: size.name
+    const handleOpenEditDrawer = (style: Style) => {
+        const styleToEdit: CreateStyle & { style_id: number } = {
+            style_id: style.style_id,
+            name: style.name
         }
-        setSizeToEdit(sizeToEdit)
+        setStyleToEdit(styleToEdit)
         setIsDrawerOpen(true)
     }
 
@@ -64,10 +64,10 @@ const Sizes = () => {
                             <LoaderComponent />
                         ) : data && data.items && data.items.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4">
-                                {data.items.map((size: Size) => (
-                                    <SizeCard
-                                        key={size.size_id}
-                                        size={size}
+                                {data.items.map((style: Style) => (
+                                    <StyleCard
+                                        key={style.style_id}
+                                        style={style}
                                         handleOpenEditDrawer={handleOpenEditDrawer}
                                     />
                                 ))}
@@ -88,14 +88,14 @@ const Sizes = () => {
 
             {/* Product Drawer */}
             {isDrawerOpen && (
-                <SizeDrawer
+                <StyleDrawer
                     isOpen={isDrawerOpen}
                     onClose={() => setIsDrawerOpen(false)}
-                    data={sizeToEdit as (CreateSize & { size_id: number }) | null}
+                    data={styleToEdit as (CreateStyle & { style_id: number }) | null}
                 />
             )}
         </Layout>
     )
 }
 
-export default Sizes
+export default Styles

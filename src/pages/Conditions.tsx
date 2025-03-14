@@ -32,6 +32,7 @@ const Conditions = () => {
 
     const handleOpenCreateDrawer = () => {
         setIsDrawerOpen(true)
+        setConditionToEdit(null)
     }
 
     const handleOpenEditDrawer = (condition: Condition) => {

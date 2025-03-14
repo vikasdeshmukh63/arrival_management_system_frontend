@@ -32,6 +32,7 @@ const Brands = () => {
 
     const handleOpenCreateDrawer = () => {
         setIsDrawerOpen(true)
+        setBrandToEdit(null)
     }
 
     const handleOpenEditDrawer = (brand: Brand) => {

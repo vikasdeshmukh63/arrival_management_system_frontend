@@ -32,6 +32,7 @@ const Colors = () => {
 
     const handleOpenCreateDrawer = () => {
         setIsDrawerOpen(true)
+        setColorToEdit(null)
     }
 
     const handleOpenEditDrawer = (color: Color) => {

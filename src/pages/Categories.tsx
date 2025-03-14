@@ -33,6 +33,7 @@ const Categories = () => {
 
     const handleOpenCreateDrawer = () => {
         setIsDrawerOpen(true)
+        setCategoryToEdit(null)
     }
 
     const handleOpenEditDrawer = (category: Category) => {

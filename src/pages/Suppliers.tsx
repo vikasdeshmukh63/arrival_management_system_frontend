@@ -1,23 +1,24 @@
 import { CustomPagination } from '@/components/mycomponents/CustomPagination'
-import StyleDrawer from '@/components/mycomponents/drawers/StyleDrawer'
+import SupplierDrawer from '@/components/mycomponents/drawers/SupplierDrawer'
 import { FilterToolbar } from '@/components/mycomponents/FilterToolbar'
 import LoaderComponent from '@/components/mycomponents/Loader'
 import NoData from '@/components/mycomponents/NoData'
 import PageHeader from '@/components/mycomponents/PageHeader'
-import StyleCard from '@/components/mycomponents/StyleCard'
+import SupplierCard from '@/components/mycomponents/SupplierCard'
 import Layout from '@/components/mycomponents/wrappers/Layout'
-import { useStyles } from '@/hooks/useStyles'
-import { CreateStyle, Style } from '@/lib/style'
+import { useSupplier } from '@/hooks/useSupplier'
+
+import { CreateSupplier, Supplier } from '@/lib/supplier'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
-const Styles = () => {
+const Suppliers = () => {
     const [searchParams] = useSearchParams()
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-    const [styleToEdit, setStyleToEdit] = useState<CreateStyle | null>(null)
+    const [supplierToEdit, setSupplierToEdit] = useState<CreateSupplier | null>(null)
 
-    const { data, isLoading, isError } = useStyles({
+    const { data, isLoading, isError } = useSupplier({
         page: parseInt(searchParams.get('page') || '1'),
         itemsPerPage: parseInt(searchParams.get('itemsPerPage') || '10'),
         search: searchParams.get('search') || undefined,
@@ -32,14 +33,19 @@ const Styles = () => {
 
     const handleOpenCreateDrawer = () => {
         setIsDrawerOpen(true)
+        setSupplierToEdit(null)
     }
 
-    const handleOpenEditDrawer = (style: Style) => {
-        const styleToEdit: CreateStyle & { style_id: number } = {
-            style_id: style.style_id,
-            name: style.name
+    const handleOpenEditDrawer = (supplier: Supplier) => {
+        const supplierToEdit: CreateSupplier & { supplier_id: number } = {
+            supplier_id: supplier.supplier_id,
+            name: supplier.name,
+            contact_person: supplier.contact_person,
+            phone: supplier.phone,
+            email: supplier.email,
+            address: supplier.address
         }
-        setStyleToEdit(styleToEdit)
+        setSupplierToEdit(supplierToEdit)
         setIsDrawerOpen(true)
     }
 
@@ -51,9 +57,9 @@ const Styles = () => {
                 <div className="flex-1 p-2 sm:p-4 overflow-y-auto">
                     <div className="flex flex-col gap-4 w-full max-w-[2000px] mx-auto">
                         <PageHeader
-                            title="Colors"
-                            description="Manage your colors here"
-                            actionLabel="New Color"
+                            title="Suppliers"
+                            description="Manage your suppliers here"
+                            actionLabel="New Supplier"
                             onAction={handleOpenCreateDrawer}
                             filters={<FilterToolbar />}
                         />
@@ -63,16 +69,16 @@ const Styles = () => {
                             <LoaderComponent />
                         ) : data && data.items && data.items.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4">
-                                {data.items.map((style: Style) => (
-                                    <StyleCard
-                                        key={style.style_id}
-                                        style={style}
+                                {data.items.map((supplier: Supplier) => (
+                                    <SupplierCard
+                                        key={supplier.supplier_id}
+                                        supplier={supplier}
                                         handleOpenEditDrawer={handleOpenEditDrawer}
                                     />
                                 ))}
                             </div>
                         ) : (
-                            <NoData item="colors" />
+                            <NoData item="suppliers" />
                         )}
                     </div>
                 </div>
@@ -87,14 +93,14 @@ const Styles = () => {
 
             {/* Product Drawer */}
             {isDrawerOpen && (
-                <StyleDrawer
+                <SupplierDrawer
                     isOpen={isDrawerOpen}
                     onClose={() => setIsDrawerOpen(false)}
-                    data={styleToEdit as (CreateStyle & { style_id: number }) | null}
+                    data={supplierToEdit as (CreateSupplier & { supplier_id: number }) | null}
                 />
             )}
         </Layout>
     )
 }
 
-export default Styles
+export default Suppliers

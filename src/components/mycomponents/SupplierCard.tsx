@@ -1,44 +1,35 @@
-import { Product } from '@/lib/products'
-import { Badge } from '../ui/badge'
+import { Supplier } from '@/lib/supplier'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
 import { useState } from 'react'
 import DeleteModal from './DeleteModal'
 
-const ProductCard = ({ product, handleOpenEditDrawer }: { product: Product; handleOpenEditDrawer: (product: Product) => void }) => {
+const SupplierCard = ({ supplier, handleOpenEditDrawer }: { supplier: Supplier; handleOpenEditDrawer: (supplier: Supplier) => void }) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
 
     return (
         <Card className="relative">
-            <CardHeader>{product.name}</CardHeader>
+            <CardHeader>{supplier.name}</CardHeader>
             <CardContent>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 gap-2">
                     <p className="text-sm text-gray-500">
-                        <span className="font-bold">Category :</span> {product.Category.name}
+                        <span className="font-bold">Contact Person :</span> {supplier.contact_person}
                     </p>
                     <p className="text-sm text-gray-500">
-                        <span className="font-bold">Style :</span> {product.Style.name}
+                        <span className="font-bold">Phone :</span> {supplier.phone}
                     </p>
                     <p className="text-sm text-gray-500">
-                        <span className="font-bold">Color :</span> {product.Color.name}
+                        <span className="font-bold">Email :</span> {supplier.email}
                     </p>
                     <p className="text-sm text-gray-500">
-                        <span className="font-bold">Size :</span> {product.Size.name}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                        <span className="font-bold">Brand :</span> {product.Brand.name}
+                        <span className="font-bold">Address :</span> {supplier.address}
                     </p>
                 </div>
             </CardContent>
-            <Badge
-                variant="default"
-                className="absolute top-2 right-2 font-bold">
-                {product.tsku}
-            </Badge>
             <CardFooter className="flex justify-between items-center">
                 <Button
                     variant="outline"
-                    onClick={() => handleOpenEditDrawer(product)}>
+                    onClick={() => handleOpenEditDrawer(supplier)}>
                     Edit
                 </Button>
                 <Button
@@ -53,12 +44,12 @@ const ProductCard = ({ product, handleOpenEditDrawer }: { product: Product; hand
                 <DeleteModal
                     open={openDeleteModal}
                     setOpen={setOpenDeleteModal}
-                    type="product"
-                    id={product.tsku}
+                    type="supplier"
+                    id={supplier.supplier_id}
                 />
             )}
         </Card>
     )
 }
 
-export default ProductCard
+export default SupplierCard

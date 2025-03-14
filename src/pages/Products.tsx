@@ -37,6 +37,7 @@ const Products = () => {
 
     const handleOpenCreateDrawer = () => {
         setIsDrawerOpen(true)
+        setProductToEdit(null)
     }
 
     const handleOpenEditDrawer = (product: Product) => {
