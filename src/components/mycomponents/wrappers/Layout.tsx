@@ -1,17 +1,17 @@
-import React from "react";
-import Menu from "../Menu";
-import { ModeToggle } from "../mode-toggle";
+import React from 'react'
+import Menu from '../Menu'
+import { ModeToggle } from '../mode-toggle'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="w-screen h-screen flex">
-      <div className="w-1/5 md:w-1/6 h-full p-4 relative border-r border-gray-200 dark:border-gray-800">
-        <Menu />
-        <ModeToggle className="absolute bottom-4 left-4"/>
-      </div>
-      <div className="w-4/5 md:w-5/6 h-full overflow-hidden overflow-y-auto">{children}</div>
-    </div>
-  );
-};
+    return (
+        <div className="w-screen h-screen flex">
+            <div className="w-1/5 md:w-1/6 h-full p-4 relative border-r border-gray-200 dark:border-gray-800">
+                <Menu />
+                <ModeToggle className="absolute bottom-4 left-4" />
+            </div>
+            <div className="w-4/5 md:w-5/6 h-full overflow-hidden overflow-y-auto">{children}</div>
+        </div>
+    )
+}
 
-export default Layout;
+export default Layout
