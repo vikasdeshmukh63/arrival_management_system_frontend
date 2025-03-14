@@ -30,12 +30,16 @@ export default function Home() {
                     voluptate, odio, voluptatem inventore aut eaque fugit eveniet.
                 </p>
                 <div className="flex justify-between items-center gap-4 z-10">
-                    <Button>Get Started</Button>
-                    <Button
-                        variant="outline"
-                        className="bg-orange-500 text-white">
-                        Learn More
-                    </Button>
+                    <Link to="/login">
+                        <Button>Get Started</Button>
+                    </Link>
+                    <Link to="/login">
+                        <Button
+                            variant="outline"
+                            className="bg-orange-500 text-white">
+                            Learn More
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </div>

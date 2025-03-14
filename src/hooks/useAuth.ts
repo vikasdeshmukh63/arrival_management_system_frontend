@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { authApi, type LoginCredentials, type RegisterCredentials } from '@/lib/auth'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 export const useAuth = () => {
     const navigate = useNavigate()
@@ -56,6 +57,7 @@ export const useAuth = () => {
             queryClient.invalidateQueries({ queryKey: ['user'] })
             // Redirect to home page after logout
             navigate('/', { replace: true })
+            toast.success('Logged out successfully')
         }
     })
 

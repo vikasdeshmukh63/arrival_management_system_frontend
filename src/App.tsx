@@ -23,6 +23,7 @@ import Conditions from './pages/Conditions'
 import Sizes from './pages/Sizes'
 import Styles from './pages/Styles'
 import Suppliers from './pages/Suppliers'
+import Logout from './pages/Logout'
 const queryClient = new QueryClient()
 
 function App() {
@@ -145,6 +146,14 @@ function App() {
                             element={
                                 <PrivateRoute>
                                     <Suppliers />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/logout"
+                            element={
+                                <PrivateRoute>
+                                    <Logout />
                                 </PrivateRoute>
                             }
                         />
