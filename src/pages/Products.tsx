@@ -74,11 +74,7 @@ const Products = () => {
             ) : data && data.items && data.items.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4">
                 {data.items.map((product: Product) => (
-                  <ProductCard
-                    key={product.product_id}
-                    product={product}
-                    handleOpenEditDrawer={handleOpenEditDrawer}
-                  />
+                  <ProductCard key={product.product_id} product={product} handleOpenEditDrawer={handleOpenEditDrawer} />
                 ))}
               </div>
             ) : (
@@ -97,7 +93,6 @@ const Products = () => {
 
       {/* Product Drawer */}
       {isDrawerOpen && <ProductDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} data={productToEdit} />}
-      
     </Layout>
   );
 };
