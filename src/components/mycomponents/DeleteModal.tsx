@@ -5,13 +5,16 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useBrands } from "@/hooks/useBrands";
 import { useCategories } from "@/hooks/useCategories";
+import { useColors } from "@/hooks/useColors";
+import { Loader } from "lucide-react";
 
 const DeleteModal = ({ open, setOpen, type, id }: { open: boolean; setOpen: (open: boolean) => void; type: string; id: string | number }) => {
   const [error, setError] = useState<Error | null>(null);
 
-  const { deleteProduct, deleteProductError } = useProducts();
-  const { deleteBrand, deleteBrandError } = useBrands();
-  const { deleteCategory, deleteCategoryError } = useCategories();
+  const { deleteProduct, deleteProductError, isDeletingProduct } = useProducts();
+  const { deleteBrand, deleteBrandError, isDeletingBrand } = useBrands();
+  const { deleteCategory, deleteCategoryError, isDeletingCategory } = useCategories();
+  const { deleteColor, deleteColorError, isDeletingColor } = useColors();
 
   const handleDelete = () => {
     switch (type) {
@@ -26,6 +29,10 @@ const DeleteModal = ({ open, setOpen, type, id }: { open: boolean; setOpen: (ope
       case "category":
         deleteCategory(id as number);
         setError(deleteCategoryError);
+        break;
+      case "color":
+        deleteColor(id as number);
+        setError(deleteColorError);
         break;
     }
   };
@@ -46,7 +53,7 @@ const DeleteModal = ({ open, setOpen, type, id }: { open: boolean; setOpen: (ope
             Cancel
           </Button>
           <Button variant="destructive" onClick={handleDelete}>
-            Delete
+            {isDeletingProduct || isDeletingBrand || isDeletingCategory || isDeletingColor ? <Loader className="animate-spin" /> : "Delete"}
           </Button>
         </DialogFooter>
       </DialogContent>

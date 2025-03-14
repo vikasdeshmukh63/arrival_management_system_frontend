@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import Brands from "./pages/Brands";
 import Categories from "./pages/Categories";
+import Colors from "./pages/Colors";
 const queryClient = new QueryClient();
 
 function App() {
@@ -98,6 +99,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <Categories />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/colors"
+              element={
+                <PrivateRoute>
+                  <Colors />
                 </PrivateRoute>
               }
             />

@@ -1,4 +1,4 @@
-import { Brand, brandApi, BrandQueryParams, CreateBrand } from "@/lib/brand";
+import { brandApi, BrandQueryParams, CreateBrand } from "@/lib/brand";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
