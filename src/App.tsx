@@ -21,6 +21,7 @@ import Categories from "./pages/Categories";
 import Colors from "./pages/Colors";
 import Conditions from "./pages/Conditions";
 import Sizes from "./pages/Sizes";
+import Styles from "./pages/Style";
 const queryClient = new QueryClient();
 
 function App() {
@@ -125,6 +126,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <Sizes />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/styles"
+              element={
+                <PrivateRoute>
+                  <Styles />
                 </PrivateRoute>
               }
             />

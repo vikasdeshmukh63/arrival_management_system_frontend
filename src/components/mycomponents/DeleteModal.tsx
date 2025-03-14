@@ -9,6 +9,7 @@ import { useColors } from "@/hooks/useColors";
 import { Loader } from "lucide-react";
 import { useConditions } from "@/hooks/useConditions";
 import { useSizes } from "@/hooks/useSizes";
+import { useStyles } from "@/hooks/useStyles";
 
 const DeleteModal = ({ open, setOpen, type, id }: { open: boolean; setOpen: (open: boolean) => void; type: string; id: string | number }) => {
   const [error, setError] = useState<Error | null>(null);
@@ -19,6 +20,7 @@ const DeleteModal = ({ open, setOpen, type, id }: { open: boolean; setOpen: (ope
   const { deleteColor, deleteColorError, isDeletingColor } = useColors();
   const { deleteCondition, deleteConditionError, isDeletingCondition } = useConditions();
   const { deleteSize, deleteSizeError, isDeletingSize } = useSizes();
+  const { deleteStyle, deleteStyleError, isDeletingStyle } = useStyles();
 
   const handleDelete = () => {
     switch (type) {
@@ -46,6 +48,10 @@ const DeleteModal = ({ open, setOpen, type, id }: { open: boolean; setOpen: (ope
         deleteSize(id as number);
         setError(deleteSizeError);
         break;
+      case "style":
+        deleteStyle(id as number);
+        setError(deleteStyleError);
+        break;
     }
   };
 
@@ -65,7 +71,7 @@ const DeleteModal = ({ open, setOpen, type, id }: { open: boolean; setOpen: (ope
             Cancel
           </Button>
           <Button variant="destructive" onClick={handleDelete}>
-            {isDeletingProduct || isDeletingBrand || isDeletingCategory || isDeletingColor || isDeletingCondition || isDeletingSize ? (
+            {isDeletingProduct || isDeletingBrand || isDeletingCategory || isDeletingColor || isDeletingCondition || isDeletingSize || isDeletingStyle ? (
               <Loader className="animate-spin" />
             ) : (
               "Delete"

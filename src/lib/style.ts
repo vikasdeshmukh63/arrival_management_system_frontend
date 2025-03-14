@@ -5,7 +5,7 @@ export interface StyleQueryParams {
   order?: string;
   search?: string;
   page?: number;
-  rowsPerPage?: number;
+  itemsPerPage?: number;
 }
 
 export interface Style {
@@ -18,6 +18,10 @@ export interface Style {
 export interface StyleResponse {
   items: Style[];
   pagination: Pagination;
+}
+
+export interface CreateStyle {
+  name: string;
 }
 
 export const styleApi = {
@@ -38,6 +42,22 @@ export const styleApi = {
       : "";
 
     const { data } = await axiosInstance.get<{ data: StyleResponse }>(`/api/styles/get-all${queryString}`);
+    return data.data;
+  },
+  createStyle: async (style: CreateStyle) => {
+    const { data } = await axiosInstance.post("/api/styles/create", style);
+    return data.data;
+  },
+  updateStyle: async (style_id: number, style: CreateStyle) => {
+    const { data } = await axiosInstance.put(`/api/styles/${style_id}`, style);
+    return data.data;
+  },
+  deleteStyle: async (style_id: number) => {
+    const { data } = await axiosInstance.delete(`/api/styles/${style_id}`);
+    return data.data;
+  },
+  deleteManyStyles: async (style_ids: number[]) => {
+    const { data } = await axiosInstance.delete("/api/styles/delete-many", { data: { ids: style_ids } });
     return data.data;
   },
 };
