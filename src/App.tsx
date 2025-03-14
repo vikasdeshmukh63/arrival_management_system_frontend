@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import Brands from "./pages/Brands";
 import Categories from "./pages/Categories";
 import Colors from "./pages/Colors";
+import Conditions from "./pages/Conditions";
 const queryClient = new QueryClient();
 
 function App() {
@@ -107,6 +108,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <Colors />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/conditions"
+              element={
+                <PrivateRoute>
+                  <Conditions />
                 </PrivateRoute>
               }
             />
