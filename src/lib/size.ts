@@ -5,7 +5,7 @@ export interface SizeQueryParams {
   order?: string;
   search?: string;
   page?: number;
-  rowsPerPage?: number;
+  itemsPerPage?: number;
 }
 
 export interface Size {
@@ -18,6 +18,10 @@ export interface Size {
 export interface SizeResponse {
   items: Size[];
   pagination: Pagination;
+}
+
+export interface CreateSize {
+  name: string;
 }
 
 export const sizeApi = {
@@ -38,6 +42,24 @@ export const sizeApi = {
       : "";
 
     const { data } = await axiosInstance.get<{ data: SizeResponse }>(`/api/sizes/get-all${queryString}`);
+    return data.data;
+  },
+  createSize: async (size: CreateSize) => {
+    const { data } = await axiosInstance.post("/api/sizes/create", size);
+    return data.data;
+  },
+  updateSize: async (size_id: number, size: CreateSize) => {
+    const { data } = await axiosInstance.put(`/api/sizes/${size_id}`, size);
+    return data.data;
+  },
+  deleteSize: async (size_id: number) => {
+    const { data } = await axiosInstance.delete(`/api/sizes/${size_id}`);
+    return data.data;
+  },
+  deleteManySizes: async (size_ids: number[]) => {
+    const { data } = await axiosInstance.delete(`/api/sizes/delete-many`, {
+      data: { ids: size_ids },
+    });
     return data.data;
   },
 };

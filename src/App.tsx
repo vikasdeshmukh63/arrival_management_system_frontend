@@ -20,6 +20,7 @@ import Brands from "./pages/Brands";
 import Categories from "./pages/Categories";
 import Colors from "./pages/Colors";
 import Conditions from "./pages/Conditions";
+import Sizes from "./pages/Sizes";
 const queryClient = new QueryClient();
 
 function App() {
@@ -116,6 +117,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <Conditions />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/sizes"
+              element={
+                <PrivateRoute>
+                  <Sizes />
                 </PrivateRoute>
               }
             />
