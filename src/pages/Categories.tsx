@@ -1,23 +1,24 @@
-import BrandCard from "@/components/mycomponents/BrandCard";
+import CategoryCard from "@/components/mycomponents/CategoryCard";
 import { CustomPagination } from "@/components/mycomponents/CustomPagination";
-import BrandDrawer from "@/components/mycomponents/drawers/BrandDrawer";
+import CategoryDrawer from "@/components/mycomponents/drawers/CategoryDrawer";
 import { FilterToolbar } from "@/components/mycomponents/FilterToolbar";
 import LoaderComponent from "@/components/mycomponents/Loader";
 import NoData from "@/components/mycomponents/NoData";
 import PageHeader from "@/components/mycomponents/PageHeader";
 import Layout from "@/components/mycomponents/wrappers/Layout";
 import { useBrands } from "@/hooks/useBrands";
-import { Brand, CreateBrand } from "@/lib/brand";
+import { useCategories } from "@/hooks/useCategories";
+import { Category, CreateCategory } from "@/lib/category";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
-const Brands = () => {
+const Categories = () => {
   const [searchParams] = useSearchParams();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [brandToEdit, setBrandToEdit] = useState<CreateBrand | null>(null);
+  const [categoryToEdit, setCategoryToEdit] = useState<CreateCategory | null>(null);
 
-  const { data, isLoading, isError } = useBrands({
+  const { data, isLoading, isError } = useCategories({
     page: parseInt(searchParams.get("page") || "1"),
     itemsPerPage: parseInt(searchParams.get("itemsPerPage") || "10"),
     search: searchParams.get("search") || undefined,
@@ -34,12 +35,13 @@ const Brands = () => {
     setIsDrawerOpen(true);
   };
 
-  const handleOpenEditDrawer = (brand: Brand) => {
-    const brandToEdit: CreateBrand & { brand_id: number } = {
-      brand_id: brand.brand_id,
-      name: brand.name,
+  const handleOpenEditDrawer = (category: Category) => {
+    const categoryToEdit: CreateCategory & { category_id: number } = {
+      category_id: category.category_id,
+      name: category.name,
+      description: category.description,
     };
-    setBrandToEdit(brandToEdit);
+    setCategoryToEdit(categoryToEdit);
     setIsDrawerOpen(true);
   };
 
@@ -63,12 +65,12 @@ const Brands = () => {
               <LoaderComponent />
             ) : data && data.items && data.items.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4">
-                {data.items.map((brand: Brand) => (
-                  <BrandCard key={brand.brand_id} brand={brand} handleOpenEditDrawer={handleOpenEditDrawer} />
+                {data.items.map((category: Category) => (
+                  <CategoryCard key={category.category_id} category={category} handleOpenEditDrawer={handleOpenEditDrawer} />
                 ))}
               </div>
             ) : (
-              <NoData item="brands" />
+              <NoData item="categories" />
             )}
           </div>
         </div>
@@ -82,9 +84,9 @@ const Brands = () => {
       </div>
 
       {/* Product Drawer */}
-      {isDrawerOpen && <BrandDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} data={brandToEdit} />}
+      {isDrawerOpen && <CategoryDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} data={categoryToEdit} />}
     </Layout>
   );
 };
 
-export default Brands;
+export default Categories;

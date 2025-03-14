@@ -4,12 +4,14 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useBrands } from "@/hooks/useBrands";
+import { useCategories } from "@/hooks/useCategories";
 
 const DeleteModal = ({ open, setOpen, type, id }: { open: boolean; setOpen: (open: boolean) => void; type: string; id: string | number }) => {
   const [error, setError] = useState<Error | null>(null);
 
   const { deleteProduct, deleteProductError } = useProducts();
   const { deleteBrand, deleteBrandError } = useBrands();
+  const { deleteCategory, deleteCategoryError } = useCategories();
 
   const handleDelete = () => {
     switch (type) {
@@ -22,6 +24,8 @@ const DeleteModal = ({ open, setOpen, type, id }: { open: boolean; setOpen: (ope
         setError(deleteBrandError);
         break;
       case "category":
+        deleteCategory(id as number);
+        setError(deleteCategoryError);
         break;
     }
   };

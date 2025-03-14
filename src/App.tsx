@@ -17,7 +17,7 @@ import useNetworkStatus from "./hooks/useNetworkStatus";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import Brands from "./pages/Brands";
-
+import Categories from "./pages/Categories";
 const queryClient = new QueryClient();
 
 function App() {
@@ -90,6 +90,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <Brands />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/categories"
+              element={
+                <PrivateRoute>
+                  <Categories />
                 </PrivateRoute>
               }
             />

@@ -58,7 +58,9 @@ export const brandApi = {
     return data.data;
   },
   deleteManyBrands: async (brand_ids: number[]) => {
-    const { data } = await axiosInstance.delete(`/api/brands/delete-many`, { data: { brand_ids } });
+    const { data } = await axiosInstance.delete(`/api/brands/delete-many`, {
+      data: { ids: brand_ids },
+    });
     return data.data;
   },
 };
