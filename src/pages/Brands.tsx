@@ -1,4 +1,6 @@
+import BrandCard from "@/components/mycomponents/BrandCard";
 import { CustomPagination } from "@/components/mycomponents/CustomPagination";
+import BrandDrawer from "@/components/mycomponents/drawers/BrandDrawer";
 import ProductDrawer from "@/components/mycomponents/drawers/ProductDrawer";
 import { FilterToolbar } from "@/components/mycomponents/FilterToolbar";
 import LoaderComponent from "@/components/mycomponents/Loader";
@@ -6,32 +8,28 @@ import NoData from "@/components/mycomponents/NoData";
 import PageHeader from "@/components/mycomponents/PageHeader";
 import ProductCard from "@/components/mycomponents/ProductCard";
 import Layout from "@/components/mycomponents/wrappers/Layout";
-import { useProducts } from "@/hooks/useProducts";
-import { CreateProduct, Product } from "@/lib/products";
+import { useBrands } from "@/hooks/useBrands";
+import { Brand, CreateBrand } from "@/lib/brand";
+import { Product } from "@/lib/products";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
-const Products = () => {
+const Brands = () => {
   const [searchParams] = useSearchParams();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [productToEdit, setProductToEdit] = useState<CreateProduct | null>(null);
+  const [brandToEdit, setBrandToEdit] = useState<CreateBrand | null>(null);
 
-  const { data, isLoading, isError } = useProducts({
+  const { data, isLoading, isError } = useBrands({
     page: parseInt(searchParams.get("page") || "1"),
     itemsPerPage: parseInt(searchParams.get("itemsPerPage") || "10"),
     search: searchParams.get("search") || undefined,
-    brand: searchParams.get("brand") ? parseInt(searchParams.get("brand")!) : undefined,
-    category: searchParams.get("category") ? parseInt(searchParams.get("category")!) : undefined,
-    color: searchParams.get("color") ? parseInt(searchParams.get("color")!) : undefined,
-    size: searchParams.get("size") ? parseInt(searchParams.get("size")!) : undefined,
-    style: searchParams.get("style") ? parseInt(searchParams.get("style")!) : undefined,
     order: searchParams.get("order") || undefined,
   });
 
   useEffect(() => {
     if (isError) {
-      toast.error("Error fetching products");
+      toast.error("Error fetching brands");
     }
   }, [isError]);
 
@@ -39,17 +37,12 @@ const Products = () => {
     setIsDrawerOpen(true);
   };
 
-  const handleOpenEditDrawer = (product: Product) => {
-    const productToEdit: CreateProduct & { tsku: string } = {
-      name: product.name,
-      brand_id: product.Brand.brand_id,
-      category_id: product.Category.category_id,
-      size_id: product.Size.size_id,
-      color_id: product.Color.color_id,
-      style_id: product.Style.style_id,
-      tsku: product.tsku,
+  const handleOpenEditDrawer = (brand: Brand) => {
+    const brandToEdit: CreateBrand & { brand_id: number } = {
+      brand_id: brand.brand_id,
+      name: brand.name,
     };
-    setProductToEdit(productToEdit);
+    setBrandToEdit(brandToEdit);
     setIsDrawerOpen(true);
   };
 
@@ -61,11 +54,11 @@ const Products = () => {
         <div className="flex-1 p-2 sm:p-4 overflow-y-auto">
           <div className="flex flex-col gap-4 w-full max-w-[2000px] mx-auto">
             <PageHeader
-              title="Products"
-              description="Manage your products here"
-              actionLabel="New Product"
+              title="Brands"
+              description="Manage your brands here"
+              actionLabel="New Brand"
               onAction={handleOpenCreateDrawer}
-              filters={<FilterToolbar enableBrands={false} enableColors={false} enableSizes={false} enableStyles={false} enableCategories={false} />}
+              filters={<FilterToolbar />}
             />
 
             {/* Show loading state while data is being fetched */}
@@ -73,12 +66,12 @@ const Products = () => {
               <LoaderComponent />
             ) : data && data.items && data.items.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4">
-                {data.items.map((product: Product) => (
-                  <ProductCard key={product.product_id} product={product} handleOpenEditDrawer={handleOpenEditDrawer} />
+                {data.items.map((brand: Brand) => (
+                  <BrandCard key={brand.brand_id} brand={brand} handleOpenEditDrawer={handleOpenEditDrawer} />
                 ))}
               </div>
             ) : (
-              <NoData item="products" />
+              <NoData item="brands" />
             )}
           </div>
         </div>
@@ -92,9 +85,9 @@ const Products = () => {
       </div>
 
       {/* Product Drawer */}
-      {isDrawerOpen && <ProductDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} data={productToEdit} />}
+      {isDrawerOpen && <BrandDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} data={brandToEdit} />}
     </Layout>
   );
 };
 
-export default Products;
+export default Brands;

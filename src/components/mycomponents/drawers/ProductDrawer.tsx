@@ -2,26 +2,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { CONSTANTS } from "@/constants/constants";
 import { useBrands } from "@/hooks/useBrands";
 import { useCategories } from "@/hooks/useCategories";
 import { useColors } from "@/hooks/useColors";
+import { useProducts } from "@/hooks/useProducts";
 import { useSizes } from "@/hooks/useSizes";
 import { useStyles } from "@/hooks/useStyles";
 import { BrandResponse } from "@/lib/brand";
 import { CategoryResponse } from "@/lib/category";
 import { ColorResponse } from "@/lib/color";
+import { CreateProduct } from "@/lib/products";
 import { SizeResponse } from "@/lib/size";
 import { StyleResponse } from "@/lib/style";
-import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError } from "axios";
+import { Loader } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import CustomSelect from "../CustomSelect";
-import { useEffect, useRef } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useProducts } from "@/hooks/useProducts";
-import { Loader } from "lucide-react";
-import { AxiosError } from "axios";
-import { CreateProduct } from "@/lib/products";
 
 const productSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -34,7 +33,7 @@ const productSchema = z.object({
 
 type ProductFormData = z.infer<typeof productSchema>;
 
-const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () => void; data?: CreateProduct | null }) => {
+const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () => void; data?: (CreateProduct & { tsku: string }) | null }) => {
   const submitRef = useRef<HTMLButtonElement>(null);
   const isSubmittingRef = useRef(false);
 
@@ -48,7 +47,7 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
     resolver: zodResolver(productSchema),
   });
 
-  const { createProduct, isCreatingProduct, createProductError, updateProduct, isUpdatingProduct, updateProductError } = useProducts();
+  const { createProduct, isCreatingProduct, createProductError, updateProduct, isUpdatingProduct,updateProductError } = useProducts();
 
   const { data: categoryData } = useCategories() as { data: CategoryResponse | undefined };
 
@@ -74,9 +73,9 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
     try {
       isSubmittingRef.current = true;
       if (!data) {
-        await createProduct(formData);
+        createProduct(formData);
       } else {
-        await updateProduct(data.product_id, formData);
+        updateProduct({ tsku: data.tsku, product: formData });
       }
     } catch (error) {
       console.error(error);
@@ -208,7 +207,7 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
         )}
         <SheetFooter>
           <Button onClick={() => submitRef.current?.click()}>
-            {isCreatingProduct ? <Loader className="animate-spin" /> : `${data ? "Update" : "Create"} Product`}
+            {isCreatingProduct || isUpdatingProduct ? <Loader className="animate-spin" /> : `${data ? "Update" : "Create"} Product`}
           </Button>
         </SheetFooter>
       </SheetContent>

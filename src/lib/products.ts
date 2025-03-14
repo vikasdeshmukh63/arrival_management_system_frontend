@@ -98,14 +98,14 @@ export const productApi = {
     const { data } = await axiosInstance.post<{ data: Product }>(`/api/products/create`, product);
     return data.data;
   },
-  updateProduct: async (product_id: number, product: Product): Promise<Product> => {
-    const { data } = await axiosInstance.put<{ data: Product }>(`/api/products/${product_id}`, product);
+  updateProduct: async (tsku: string, product: CreateProduct): Promise<number[]> => {
+    const { data } = await axiosInstance.put<{ data: number[] }>(`/api/products/${tsku}`, product);
     return data.data;
   },
-  deleteProduct: async (product_id: string): Promise<void> => {
-    await axiosInstance.delete(`/api/products/${product_id}`);
+  deleteProduct: async (tsku: string): Promise<void> => {
+    await axiosInstance.delete(`/api/products/${tsku}`);
   },
-  deleteManyProducts: async (product_ids: number[]): Promise<void> => {
-    await axiosInstance.delete(`/api/products/delete-many`, { data: { product_ids } });
+  deleteManyProducts: async (tsku: string[]): Promise<void> => {
+    await axiosInstance.delete(`/api/products/delete-many`, { data: { tsku } });
   },
 };

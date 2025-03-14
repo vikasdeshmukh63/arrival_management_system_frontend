@@ -10,7 +10,19 @@ import { Input } from "../ui/input";
 import { useEffect, useState, useCallback } from "react";
 import { ArrowDown10, ArrowUp10 } from "lucide-react";
 
-export function FilterToolbar() {
+export function FilterToolbar({
+  enableBrands,
+  enableColors,
+  enableSizes,
+  enableStyles,
+  enableCategories,
+}: {
+  enableBrands?: boolean;
+  enableColors?: boolean;
+  enableSizes?: boolean;
+  enableStyles?: boolean;
+  enableCategories?: boolean;
+}) {
   const { data: brands } = useBrands();
   const { data: colors } = useColors();
   const { data: sizes } = useSizes();
@@ -35,12 +47,15 @@ export function FilterToolbar() {
     }
   };
 
-  const handleFilterClick = useCallback((type: string, id: number | string) => {
-    setSearchParams((prev) => {
-      prev.set(type.toLowerCase(), id.toString());
-      return prev;
-    });
-  }, [setSearchParams]);
+  const handleFilterClick = useCallback(
+    (type: string, id: number | string) => {
+      setSearchParams((prev) => {
+        prev.set(type.toLowerCase(), id.toString());
+        return prev;
+      });
+    },
+    [setSearchParams]
+  );
 
   const handleClearFilters = () => {
     const page = searchParams.get("page");
@@ -78,60 +93,70 @@ export function FilterToolbar() {
 
       <div className="flex items-center gap-2 flex-wrap md:flex-nowrap">
         <Menubar>
-          <MenubarMenu>
-            <MenubarTrigger>Brands</MenubarTrigger>
-            <MenubarContent>
-              {brands?.items?.map((brand) => (
-                <MenubarItem key={brand.brand_id} onClick={() => handleFilterClick("brand", brand.brand_id)}>
-                  {brand.name}
-                </MenubarItem>
-              ))}
-            </MenubarContent>
-          </MenubarMenu>
+          {enableBrands && (
+            <MenubarMenu>
+              <MenubarTrigger>Brands</MenubarTrigger>
+              <MenubarContent>
+                {brands?.items?.map((brand) => (
+                  <MenubarItem key={brand.brand_id} onClick={() => handleFilterClick("brand", brand.brand_id)}>
+                    {brand.name}
+                  </MenubarItem>
+                ))}
+              </MenubarContent>
+            </MenubarMenu>
+          )}
 
-          <MenubarMenu>
-            <MenubarTrigger>Colors</MenubarTrigger>
-            <MenubarContent>
-              {colors?.items?.map((color) => (
-                <MenubarItem key={color.color_id} onClick={() => handleFilterClick("color", color.color_id)}>
-                  {color.name}
-                </MenubarItem>
-              ))}
-            </MenubarContent>
-          </MenubarMenu>
+          {enableColors && (
+            <MenubarMenu>
+              <MenubarTrigger>Colors</MenubarTrigger>
+              <MenubarContent>
+                {colors?.items?.map((color) => (
+                  <MenubarItem key={color.color_id} onClick={() => handleFilterClick("color", color.color_id)}>
+                    {color.name}
+                  </MenubarItem>
+                ))}
+              </MenubarContent>
+            </MenubarMenu>
+          )}
 
-          <MenubarMenu>
-            <MenubarTrigger>Sizes</MenubarTrigger>
-            <MenubarContent>
-              {sizes?.items?.map((size) => (
-                <MenubarItem key={size.size_id} onClick={() => handleFilterClick("size", size.size_id)}>
-                  {size.name}
-                </MenubarItem>
-              ))}
-            </MenubarContent>
-          </MenubarMenu>
+          {enableSizes && (
+            <MenubarMenu>
+              <MenubarTrigger>Sizes</MenubarTrigger>
+              <MenubarContent>
+                {sizes?.items?.map((size) => (
+                  <MenubarItem key={size.size_id} onClick={() => handleFilterClick("size", size.size_id)}>
+                    {size.name}
+                  </MenubarItem>
+                ))}
+              </MenubarContent>
+            </MenubarMenu>
+          )}
 
-          <MenubarMenu>
-            <MenubarTrigger>Styles</MenubarTrigger>
-            <MenubarContent>
-              {styles?.items?.map((style) => (
-                <MenubarItem key={style.style_id} onClick={() => handleFilterClick("style", style.style_id)}>
-                  {style.name}
-                </MenubarItem>
-              ))}
-            </MenubarContent>
-          </MenubarMenu>
+          {enableStyles && (
+            <MenubarMenu>
+              <MenubarTrigger>Styles</MenubarTrigger>
+              <MenubarContent>
+                {styles?.items?.map((style) => (
+                  <MenubarItem key={style.style_id} onClick={() => handleFilterClick("style", style.style_id)}>
+                    {style.name}
+                  </MenubarItem>
+                ))}
+              </MenubarContent>
+            </MenubarMenu>
+          )}
 
-          <MenubarMenu>
-            <MenubarTrigger>Categories</MenubarTrigger>
-            <MenubarContent>
-              {categories?.items?.map((category) => (
-                <MenubarItem key={category.category_id} onClick={() => handleFilterClick("category", category.category_id)}>
-                  {category.name}
-                </MenubarItem>
-              ))}
-            </MenubarContent>
-          </MenubarMenu>
+          {enableCategories && (
+            <MenubarMenu>
+              <MenubarTrigger>Categories</MenubarTrigger>
+              <MenubarContent>
+                {categories?.items?.map((category) => (
+                  <MenubarItem key={category.category_id} onClick={() => handleFilterClick("category", category.category_id)}>
+                    {category.name}
+                  </MenubarItem>
+                ))}
+              </MenubarContent>
+            </MenubarMenu>
+          )}
 
           <MenubarMenu>
             {order === "asc" ? (

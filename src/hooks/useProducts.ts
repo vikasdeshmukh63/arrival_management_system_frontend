@@ -1,8 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreateProduct, Product, productApi, ProductQueryParams } from "@/lib/products";
+import { CreateProduct, productApi, ProductQueryParams } from "@/lib/products";
 import { toast } from "sonner";
-
-
 
 export const useProducts = (params?: ProductQueryParams) => {
   const queryClient = useQueryClient();
@@ -26,7 +24,9 @@ export const useProducts = (params?: ProductQueryParams) => {
   });
 
   const updateProductMutation = useMutation({
-    mutationFn: (product: Product) => productApi.updateProduct(product.product_id, product),
+    mutationFn: ({ tsku, product }: { tsku: string; product: CreateProduct }) => {
+      return productApi.updateProduct(tsku, product);
+    },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Product updated successfully");

@@ -16,6 +16,7 @@ import Products from "./pages/Products";
 import useNetworkStatus from "./hooks/useNetworkStatus";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import Brands from "./pages/Brands";
 
 const queryClient = new QueryClient();
 
@@ -84,7 +85,14 @@ function App() {
                 </PrivateRoute>
               }
             />
-
+            <Route
+              path="/brands"
+              element={
+                <PrivateRoute>
+                  <Brands />
+                </PrivateRoute>
+              }
+            />
             {/* Catch all route - redirect to home */}
             <Route
               path="*"
