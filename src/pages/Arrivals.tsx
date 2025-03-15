@@ -1,6 +1,7 @@
 import ArrivalCard from '@/components/mycomponents/ArrivalCard'
 import ColorCard from '@/components/mycomponents/ColorCard'
 import { CustomPagination } from '@/components/mycomponents/CustomPagination'
+import ArrivalDrawer from '@/components/mycomponents/drawers/ArrivalDrawer'
 import ColorDrawer from '@/components/mycomponents/drawers/ColorDrawer'
 import { FilterToolbar } from '@/components/mycomponents/FilterToolbar'
 import LoaderComponent from '@/components/mycomponents/Loader'
@@ -104,7 +105,7 @@ const Arrivals = () => {
 
             {/* Product Drawer */}
             {isDrawerOpen && (
-                <ColorDrawer
+                <ArrivalDrawer
                     isOpen={isDrawerOpen}
                     onClose={() => setIsDrawerOpen(false)}
                     data={arrivalToEdit}

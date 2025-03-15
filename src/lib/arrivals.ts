@@ -57,11 +57,13 @@ export interface CreateArrival {
     expected_pieces?: number
     expected_pallets?: number
     notes?: string | null
-    arrival_products: {
-        product_id: number
-        expected_quantity: number
-        condition_id: number
-    }[]
+    expected_date: string
+}
+
+export interface ArrivalProduct {
+    product_id: number
+    expected_quantity: number
+    condition_id: number
 }
 
 export const arrivalApi = {
@@ -92,12 +94,16 @@ export const arrivalApi = {
         const { data } = await axiosInstance.post<{ data: Arrival }>(`/api/arrivals/create`, arrival)
         return data.data
     },
-    updateArrival: async (arrival_id: number, arrival: CreateArrival): Promise<number[]> => {
-        const { data } = await axiosInstance.put<{ data: number[] }>(`/api/arrivals/${arrival_id}`, arrival)
+    updateArrival: async (arrival_number: string, arrival: CreateArrival): Promise<number[]> => {
+        const { data } = await axiosInstance.put<{ data: number[] }>(`/api/arrivals/${arrival_number}`, arrival)
         return data.data
     },
     deleteArrival: async (arrival_id: number): Promise<number[]> => {
         const { data } = await axiosInstance.delete<{ data: number[] }>(`/api/arrivals/${arrival_id}`)
+        return data.data
+    },
+    addProductsToArrival: async (arrival_number: string, arrival_products: ArrivalProduct[]): Promise<number[]> => {
+        const { data } = await axiosInstance.post<{ data: number[] }>(`/api/arrivals/add-products/${arrival_number}`, { arrival_products })
         return data.data
     }
 }

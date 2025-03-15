@@ -1,4 +1,4 @@
-import { arrivalApi, ArrivalQueryParams, CreateArrival } from '@/lib/arrivals'
+import { arrivalApi, ArrivalQueryParams, CreateArrival, ArrivalProduct } from '@/lib/arrivals'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
@@ -23,7 +23,8 @@ export const useArrivals = (params?: ArrivalQueryParams) => {
     })
 
     const updateArrivalMutation = useMutation({
-        mutationFn: ({ arrival_id, arrival }: { arrival_id: number; arrival: CreateArrival }) => arrivalApi.updateArrival(arrival_id, arrival),
+        mutationFn: ({ arrival_number, arrival }: { arrival_number: string; arrival: CreateArrival }) =>
+            arrivalApi.updateArrival(arrival_number, arrival),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['arrivals'] })
             toast.success('Arrival updated successfully')
@@ -44,18 +45,34 @@ export const useArrivals = (params?: ArrivalQueryParams) => {
         }
     })
 
+    const addProductsToArrivalMutation = useMutation({
+        mutationFn: ({ arrival_number, arrival_products }: { arrival_number: string; arrival_products: ArrivalProduct[] }) =>
+            arrivalApi.addProductsToArrival(arrival_number, arrival_products),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['arrivals'] })
+            toast.success('Products added to arrival successfully')
+        },
+        onError: (error) => {
+            toast.error(error.message)
+        }
+    })
+
     return {
         data,
         isLoading,
         isError,
-        createArrival: createArrivalMutation.mutate,
+        createArrival: createArrivalMutation.mutateAsync,
+        isCreating: createArrivalMutation.isPending,
         createArrivalError: createArrivalMutation.error,
         isUpdating: updateArrivalMutation.isPending,
         updateArrivalError: updateArrivalMutation.error,
         isDeleting: deleteArrivalMutation.isPending,
         deleteArrivalError: deleteArrivalMutation.error,
         updateArrival: updateArrivalMutation.mutate,
-        deleteArrival: deleteArrivalMutation.mutate
+        deleteArrival: deleteArrivalMutation.mutate,
+        addProductsToArrival: addProductsToArrivalMutation.mutate,
+        isAddingProducts: addProductsToArrivalMutation.isPending,
+        addProductsToArrivalError: addProductsToArrivalMutation.error
     }
 }
 // Separate hook for getting a single arrival by ID
