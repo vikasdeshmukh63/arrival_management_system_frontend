@@ -9,19 +9,22 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { useEffect, useState, useCallback } from 'react'
 import { ArrowDown10, ArrowUp10 } from 'lucide-react'
+import { EArrivalStatus } from '@/constants/constants'
 
 export function FilterToolbar({
     enableBrands,
     enableColors,
     enableSizes,
     enableStyles,
-    enableCategories
+    enableCategories,
+    status
 }: {
     enableBrands?: boolean
     enableColors?: boolean
     enableSizes?: boolean
     enableStyles?: boolean
     enableCategories?: boolean
+    status?: boolean
 }) {
     const { data: brands } = useBrands()
     const { data: colors } = useColors()
@@ -76,7 +79,7 @@ export function FilterToolbar({
     }, [handleFilterClick, order])
 
     return (
-        <div className="flex items-center justify-between gap-2 flex-wrap md:flex-nowr">
+        <div className="flex items-center justify-between gap-2 flex-wrap md:flex-nowrap">
             <div className="flex items-center gap-2 w-full md:w-auto">
                 <Input
                     placeholder="Search"
@@ -168,6 +171,29 @@ export function FilterToolbar({
                         </MenubarMenu>
                     )}
 
+                    {status && (
+                        <MenubarMenu>
+                            <MenubarTrigger>Status</MenubarTrigger>
+                            <MenubarContent>
+                                <MenubarItem onClick={() => handleFilterClick('status', EArrivalStatus.UPCOMING)}>
+                                    {EArrivalStatus.UPCOMING}
+                                </MenubarItem>
+                                <MenubarItem onClick={() => handleFilterClick('status', EArrivalStatus.IN_PROGRESS)}>
+                                    {EArrivalStatus.IN_PROGRESS}
+                                </MenubarItem>
+                                <MenubarItem onClick={() => handleFilterClick('status', EArrivalStatus.FINISHED)}>
+                                    {EArrivalStatus.FINISHED}
+                                </MenubarItem>
+                                <MenubarItem onClick={() => handleFilterClick('status', EArrivalStatus.COMPLETED_WITH_DISCREPANCY)}>
+                                    {EArrivalStatus.COMPLETED_WITH_DISCREPANCY}
+                                </MenubarItem>
+                                <MenubarItem onClick={() => handleFilterClick('status', EArrivalStatus.NOT_INITIATED)}>
+                                    {EArrivalStatus.NOT_INITIATED}
+                                </MenubarItem>
+                            </MenubarContent>
+                        </MenubarMenu>
+                    )}
+
                     <MenubarMenu>
                         {order === 'asc' ? (
                             <MenubarTrigger onClick={() => setOrder('desc')}>
@@ -181,13 +207,11 @@ export function FilterToolbar({
                     </MenubarMenu>
                 </Menubar>
 
-                <Menubar>
-                    <Button
-                        variant="outline"
-                        onClick={handleClearFilters}>
-                        Clear Filters
-                    </Button>
-                </Menubar>
+                <Button
+                    variant="outline"
+                    onClick={handleClearFilters}>
+                    Clear Filters
+                </Button>
             </div>
         </div>
     )
