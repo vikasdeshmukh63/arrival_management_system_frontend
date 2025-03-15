@@ -44,7 +44,7 @@ const ArrivalCard = ({
             expected_kilograms: arrival.expected_kilograms,
             expected_pieces: arrival.expected_pieces,
             expected_pallets: arrival.expected_pallets,
-            expected_date: arrival.expected_date,
+            expected_date: new Date(arrival.expected_date),
             notes: arrival.notes,
             arrival_number: arrival.arrival_number,
             arrival_products: arrival.Products.map((p) => ({
@@ -127,6 +127,12 @@ const ArrivalCard = ({
                         onClick={handleEditArrival}>
                         Edit
                     </Button>
+                )}
+
+                {arrival.status === EArrivalStatus.UPCOMING && (
+                    <div className="w-full">
+                        <Button className="w-full">Start Processing</Button>
+                    </div>
                 )}
 
                 {arrival.status === EArrivalStatus.IN_PROGRESS && (

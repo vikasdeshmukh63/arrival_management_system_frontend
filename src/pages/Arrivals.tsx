@@ -47,7 +47,7 @@ const Arrivals = () => {
             expected_kilograms: arrival.expected_kilograms,
             expected_pieces: arrival.expected_pieces,
             expected_pallets: arrival.expected_pallets,
-            expected_date: arrival.expected_date,
+            expected_date: new Date(arrival.expected_date),
             notes: arrival.notes,
             arrival_number: arrival.arrival_number,
             arrival_products: arrival.Products.map((p) => ({
@@ -60,7 +60,6 @@ const Arrivals = () => {
         setIsDrawerOpen(true)
     }
 
-    console.log(createdArrival, 'from arrivals')
 
     return (
         <Layout>

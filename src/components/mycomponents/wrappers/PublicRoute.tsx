@@ -7,7 +7,6 @@ interface PublicRouteProps {
 
 export const PublicRoute = ({ children }: PublicRouteProps) => {
     const { isAuthenticated, isLoadingUser } = useAuth()
-    console.log(isAuthenticated, isLoadingUser)
 
     // During initial load, render children to prevent flash of loading
     if (isLoadingUser) {

@@ -66,7 +66,7 @@ export const useArrivals = (params?: ArrivalQueryParams) => {
         createArrivalError: createArrivalMutation.error,
         isUpdating: updateArrivalMutation.isPending,
         updateArrivalError: updateArrivalMutation.error,
-        isDeleting: deleteArrivalMutation.isPending,
+        isDeletingArrival: deleteArrivalMutation.isPending,
         deleteArrivalError: deleteArrivalMutation.error,
         updateArrival: updateArrivalMutation.mutate,
         deleteArrival: deleteArrivalMutation.mutate,

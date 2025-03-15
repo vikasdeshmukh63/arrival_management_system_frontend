@@ -41,23 +41,24 @@ const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedProducts, setSelectedProducts] = useState<Record<number, SelectedProduct>>({})
 
-    console.log(arrivalId, 'from product form')
-
     // Initialize form with existing data
     useEffect(() => {
-        if (data?.Products) {
+        console.log('useEffect triggered with:', { data, arrivalId })
+        if (data?.arrival_products) {
+            console.log('Products found:', data.Products)
             const initialProducts: Record<number, SelectedProduct> = {}
-            data.Products.forEach((product) => {
+            data.arrival_products.forEach((product) => {
                 initialProducts[product.product_id] = {
                     product_id: product.product_id,
-                    condition_id: product.ArrivalProduct.condition_id,
-                    expected_quantity: product.ArrivalProduct.expected_quantity,
+                    condition_id: product.condition_id,
+                    expected_quantity: product.expected_quantity,
                     isSelected: true
                 }
             })
+            console.log('Setting selected products:', initialProducts)
             setSelectedProducts(initialProducts)
         }
-    }, [data])
+    }, [data?.arrival_products, arrivalId])
 
     const { data: products, isLoading: isProductsLoading } = useProducts({
         search: searchQuery || undefined
@@ -122,7 +123,7 @@ const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
             }
         }))
     }
-    console.log(selectedProducts)
+
     const handleSubmit = () => {
         const selectedData = Object.values(selectedProducts).map(({ product_id, condition_id, expected_quantity }) => ({
             product_id,

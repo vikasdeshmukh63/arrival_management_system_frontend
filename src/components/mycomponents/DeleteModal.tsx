@@ -11,6 +11,7 @@ import { useConditions } from '@/hooks/useConditions'
 import { useSizes } from '@/hooks/useSizes'
 import { useStyles } from '@/hooks/useStyles'
 import { useSupplier } from '@/hooks/useSupplier'
+import { useArrivals } from '@/hooks/useArrivals'
 
 const DeleteModal = ({ open, setOpen, type, id }: { open: boolean; setOpen: (open: boolean) => void; type: string; id: string | number }) => {
     const [error, setError] = useState<Error | null>(null)
@@ -23,6 +24,7 @@ const DeleteModal = ({ open, setOpen, type, id }: { open: boolean; setOpen: (ope
     const { deleteSize, deleteSizeError, isDeletingSize } = useSizes()
     const { deleteStyle, deleteStyleError, isDeletingStyle } = useStyles()
     const { deleteSupplier, deleteSupplierError, isDeletingSupplier } = useSupplier()
+    const { deleteArrival, deleteArrivalError, isDeletingArrival } = useArrivals()
 
     const handleDelete = () => {
         switch (type) {
@@ -58,6 +60,10 @@ const DeleteModal = ({ open, setOpen, type, id }: { open: boolean; setOpen: (ope
                 deleteSupplier(id as number)
                 setError(deleteSupplierError)
                 break
+            case 'arrival':
+                deleteArrival(id as number)
+                setError(deleteArrivalError)
+                break
         }
     }
 
@@ -90,7 +96,8 @@ const DeleteModal = ({ open, setOpen, type, id }: { open: boolean; setOpen: (ope
                         isDeletingCondition ||
                         isDeletingSize ||
                         isDeletingStyle ||
-                        isDeletingSupplier ? (
+                        isDeletingSupplier ||
+                        isDeletingArrival ? (
                             <Loader className="animate-spin" />
                         ) : (
                             'Delete'

@@ -1,18 +1,18 @@
 import { useArrivals } from '@/hooks/useArrivals'
-import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect, useRef } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { Input } from '../ui/input'
-import { Label } from '../ui/label'
-import CustomSelect from './CustomSelect'
 import { useSupplier } from '@/hooks/useSupplier'
-import { SupplierResponse } from '@/lib/supplier'
-import { Textarea } from '../ui/textarea'
 import { Arrival, CreateArrival } from '@/lib/arrivals'
-import { Button } from '../ui/button'
+import { SupplierResponse } from '@/lib/supplier'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
 import { Loader } from 'lucide-react'
+import { useEffect, useRef } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
+import { Textarea } from '../ui/textarea'
+import CustomSelect from './CustomSelect'
 
 const arrivalSchema = z.object({
     title: z.string().min(1, 'Title is required'),
@@ -69,16 +69,16 @@ const ArrivalForm = ({
 
     useEffect(() => {
         if (data) {
-            reset({
-                title: data.title,
-                supplier_id: data.supplier_id,
-                expected_boxes: data.expected_boxes,
-                expected_kilograms: data.expected_kilograms as number,
-                expected_pallets: data.expected_pallets,
-                expected_pieces: data.expected_pieces,
-                expected_date: new Date(data.expected_date),
-                notes: data.notes as string
-            })
+            // reset({
+            //     title: data.title,
+            //     supplier_id: Number(data.supplier_id),
+            //     expected_boxes: Number(data.expected_boxes),
+            //     expected_kilograms: Number(data.expected_kilograms),
+            //     expected_pallets: Number(data.expected_pallets),
+            //     expected_pieces: Number(data.expected_pieces),
+            //     expected_date: new Date(data.expected_date),
+            //     notes: data.notes as string
+            // })
         } else {
             reset()
         }
@@ -110,8 +110,6 @@ const ArrivalForm = ({
                     return value !== undefined && value !== ''
                 })
             ) as unknown as ArrivalFormData
-
-            console.log(cleanedFormData,'clearn')
 
             if (!data) {
                 const result = await createArrival(cleanedFormData)
@@ -172,6 +170,7 @@ const ArrivalForm = ({
                         type="number"
                         placeholder="Expected Boxes"
                         id="expected_boxes"
+                        defaultValue={data?.expected_boxes}
                         {...register('expected_boxes')}
                     />
                     {errors.expected_boxes && <span className="text-xs text-red-500">{errors.expected_boxes.message}</span>}
@@ -183,6 +182,7 @@ const ArrivalForm = ({
                         type="number"
                         placeholder="Expected Kilograms"
                         id="expected_kilograms"
+                        defaultValue={data?.expected_kilograms}
                         {...register('expected_kilograms')}
                     />
                     {errors.expected_kilograms && <span className="text-xs text-red-500">{errors.expected_kilograms.message}</span>}
@@ -194,6 +194,7 @@ const ArrivalForm = ({
                         type="number"
                         placeholder="Expected Pallets"
                         id="expected_pallets"
+                        defaultValue={data?.expected_pallets}
                         {...register('expected_pallets')}
                     />
                     {errors.expected_pallets && <span className="text-xs text-red-500">{errors.expected_pallets.message}</span>}
@@ -205,6 +206,7 @@ const ArrivalForm = ({
                         type="number"
                         placeholder="Expected Pieces"
                         id="expected_pieces"
+                        defaultValue={data?.expected_pieces}
                         {...register('expected_pieces')}
                     />
                     {errors.expected_pieces && <span className="text-xs text-red-500">{errors.expected_pieces.message}</span>}
@@ -217,6 +219,7 @@ const ArrivalForm = ({
                         placeholder="Expected Date"
                         id="expected_date"
                         {...register('expected_date')}
+                        defaultValue={data?.expected_date ? new Date(data.expected_date).toISOString().split('T')[0] : undefined}
                     />
                     {errors.expected_date && <span className="text-xs text-red-500">{errors.expected_date.message}</span>}
                 </div>
@@ -226,6 +229,7 @@ const ArrivalForm = ({
                     <Textarea
                         placeholder="Notes"
                         id="notes"
+                        defaultValue={data?.notes as string}
                         {...register('notes')}
                     />
                     {errors.notes && <span className="text-xs text-red-500">{errors.notes.message}</span>}
