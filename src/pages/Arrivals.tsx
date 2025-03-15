@@ -1,17 +1,13 @@
 import ArrivalCard from '@/components/mycomponents/ArrivalCard'
-import ColorCard from '@/components/mycomponents/ColorCard'
 import { CustomPagination } from '@/components/mycomponents/CustomPagination'
 import ArrivalDrawer from '@/components/mycomponents/drawers/ArrivalDrawer'
-import ColorDrawer from '@/components/mycomponents/drawers/ColorDrawer'
 import { FilterToolbar } from '@/components/mycomponents/FilterToolbar'
 import LoaderComponent from '@/components/mycomponents/Loader'
 import NoData from '@/components/mycomponents/NoData'
 import PageHeader from '@/components/mycomponents/PageHeader'
 import Layout from '@/components/mycomponents/wrappers/Layout'
 import { useArrivals } from '@/hooks/useArrivals'
-import { useColors } from '@/hooks/useColors'
 import { Arrival, CreateArrival } from '@/lib/arrivals'
-import { Color, CreateColor } from '@/lib/color'
 import { Product } from '@/lib/products'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -20,7 +16,8 @@ import { toast } from 'sonner'
 const Arrivals = () => {
     const [searchParams] = useSearchParams()
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-    const [arrivalToEdit, setArrivalToEdit] = useState<CreateArrival | null>(null)
+    const [arrivalToEdit, setArrivalToEdit] = useState<(CreateArrival & { arrival_number: string }) | null>(null)
+    const [createdArrival, setCreatedArrival] = useState<(CreateArrival & { arrival_number: string }) | null>(null)
 
     const { data, isLoading, isError } = useArrivals({
         page: parseInt(searchParams.get('page') || '1'),
@@ -43,14 +40,16 @@ const Arrivals = () => {
     }
 
     const handleOpenEditDrawer = (arrival: Arrival) => {
-        const arrivalToEdit: CreateArrival = {
+        const arrivalToEdit: CreateArrival & { arrival_number: string } = {
             title: arrival.title,
             supplier_id: arrival.Supplier.supplier_id,
             expected_boxes: arrival.expected_boxes,
             expected_kilograms: arrival.expected_kilograms,
             expected_pieces: arrival.expected_pieces,
             expected_pallets: arrival.expected_pallets,
+            expected_date: arrival.expected_date,
             notes: arrival.notes,
+            arrival_number: arrival.arrival_number,
             arrival_products: arrival.Products.map((p) => ({
                 product_id: (p as unknown as Product).product_id,
                 expected_quantity: p.ArrivalProduct.expected_quantity,
@@ -60,6 +59,8 @@ const Arrivals = () => {
         setArrivalToEdit(arrivalToEdit)
         setIsDrawerOpen(true)
     }
+
+    console.log(createdArrival, 'from arrivals')
 
     return (
         <Layout>
@@ -86,6 +87,7 @@ const Arrivals = () => {
                                         key={arrival.arrival_id}
                                         arrival={arrival}
                                         handleOpenEditDrawer={handleOpenEditDrawer}
+                                        setCreatedArrival={setCreatedArrival}
                                     />
                                 ))}
                             </div>
@@ -108,6 +110,8 @@ const Arrivals = () => {
                 <ArrivalDrawer
                     isOpen={isDrawerOpen}
                     onClose={() => setIsDrawerOpen(false)}
+                    setCreatedArrival={setCreatedArrival}
+                    createdArrival={createdArrival}
                     data={arrivalToEdit}
                 />
             )}

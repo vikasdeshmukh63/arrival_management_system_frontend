@@ -7,6 +7,7 @@ import DeleteModal from './DeleteModal'
 import { Arrival } from '@/lib/arrivals'
 import { EArrivalStatus } from '@/constants/constants'
 import { Progress } from '../ui/progress'
+import { CreateArrival } from '@/lib/arrivals'
 
 const formatDate = (date: string | null) => {
     if (!date) return 'N/A'
@@ -23,9 +24,38 @@ const formatStatus = (status: string) => {
     return modifiedStatus
 }
 
-const ArrivalCard = ({ arrival, handleOpenEditDrawer }: { arrival: Arrival; handleOpenEditDrawer: (arrival: Arrival) => void }) => {
+const ArrivalCard = ({
+    arrival,
+    handleOpenEditDrawer,
+    setCreatedArrival
+}: {
+    arrival: Arrival
+    handleOpenEditDrawer: (arrival: Arrival) => void
+    setCreatedArrival: (arrival: (CreateArrival & { arrival_number: string }) | null) => void
+}) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
+
+    const handleEditArrival = () => {
+        const arrivalToEdit: CreateArrival & { arrival_number: string } = {
+            title: arrival.title,
+            supplier_id: arrival.Supplier.supplier_id,
+            expected_boxes: arrival.expected_boxes,
+            expected_kilograms: arrival.expected_kilograms,
+            expected_pieces: arrival.expected_pieces,
+            expected_pallets: arrival.expected_pallets,
+            expected_date: arrival.expected_date,
+            notes: arrival.notes,
+            arrival_number: arrival.arrival_number,
+            arrival_products: arrival.Products.map((p) => ({
+                product_id: (p as unknown as Product).product_id,
+                expected_quantity: p.ArrivalProduct.expected_quantity,
+                condition_id: p.ArrivalProduct.condition_id
+            }))
+        }
+        setCreatedArrival(arrivalToEdit)
+        handleOpenEditDrawer(arrival)
+    }
 
     const { progress, discrepancy } = useMemo(() => {
         if (!arrival.Products || arrival.Products.length === 0) {
@@ -94,7 +124,7 @@ const ArrivalCard = ({ arrival, handleOpenEditDrawer }: { arrival: Arrival; hand
                     <Button
                         variant="outline"
                         className="w-full md:w-fit"
-                        onClick={() => handleOpenEditDrawer(arrival)}>
+                        onClick={handleEditArrival}>
                         Edit
                     </Button>
                 )}

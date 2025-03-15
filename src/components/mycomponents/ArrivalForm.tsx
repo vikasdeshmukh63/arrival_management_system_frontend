@@ -76,7 +76,7 @@ const ArrivalForm = ({
                 expected_kilograms: data.expected_kilograms as number,
                 expected_pallets: data.expected_pallets,
                 expected_pieces: data.expected_pieces,
-                expected_date: new Date(data.expected_date as string),
+                expected_date: new Date(data.expected_date),
                 notes: data.notes as string
             })
         } else {
@@ -111,9 +111,10 @@ const ArrivalForm = ({
                 })
             ) as unknown as ArrivalFormData
 
+            console.log(cleanedFormData,'clearn')
+
             if (!data) {
                 const result = await createArrival(cleanedFormData)
-                console.log(result)
                 if (onSuccess && result) {
                     onSuccess({
                         ...cleanedFormData,

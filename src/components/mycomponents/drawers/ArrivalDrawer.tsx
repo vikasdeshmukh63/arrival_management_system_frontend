@@ -8,20 +8,17 @@ import { useState } from 'react'
 const ArrivalDrawer = ({
     isOpen,
     onClose,
-    data
+    data,
+    setCreatedArrival,
+    createdArrival
 }: {
     isOpen: boolean
     onClose: () => void
     data?: (CreateArrival & { arrival_number: string }) | null
+    setCreatedArrival: (arrival: (CreateArrival & { arrival_number: string }) | null) => void
+    createdArrival: (CreateArrival & { arrival_number: string }) | null
 }) => {
     const [selectedTab, setSelectedTab] = useState<'arrival' | 'products'>('arrival')
-    const [createdArrival, setCreatedArrival] = useState<(CreateArrival & { arrival_number: string }) | null>(null)
-
-    const handleProductFormClose = () => {
-        onClose()
-        setCreatedArrival(null)
-        setSelectedTab('arrival')
-    }
 
     return (
         <Sheet
@@ -56,7 +53,10 @@ const ArrivalDrawer = ({
                         />
                     </TabsContent>
                     <TabsContent value="products">
-                        <ProductForm arrivalId={createdArrival?.arrival_number} />
+                        <ProductForm
+                            arrivalId={createdArrival?.arrival_number}
+                            data={data}
+                        />
                     </TabsContent>
                 </Tabs>
             </SheetContent>

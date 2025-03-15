@@ -57,7 +57,8 @@ export interface CreateArrival {
     expected_pieces?: number
     expected_pallets?: number
     notes?: string | null
-    expected_date: string
+    expected_date: Date
+    arrival_products?: ArrivalProduct[]
 }
 
 export interface ArrivalProduct {

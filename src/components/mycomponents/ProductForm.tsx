@@ -10,9 +10,23 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import LoaderComponent from './Loader'
 import NoData from './NoData'
+import { CreateArrival } from '@/lib/arrivals'
 
 interface ProductFormProps {
     arrivalId?: string
+    data?:
+        | (CreateArrival & {
+              arrival_number: string
+              Products?: Array<
+                  Product & {
+                      ArrivalProduct: {
+                          expected_quantity: number
+                          condition_id: number
+                      }
+                  }
+              >
+          })
+        | null
 }
 
 interface SelectedProduct {
@@ -22,10 +36,28 @@ interface SelectedProduct {
     isSelected: boolean
 }
 
-const ProductForm = ({ arrivalId }: ProductFormProps) => {
+const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
     const [search, setSearch] = useState('')
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedProducts, setSelectedProducts] = useState<Record<number, SelectedProduct>>({})
+
+    console.log(arrivalId, 'from product form')
+
+    // Initialize form with existing data
+    useEffect(() => {
+        if (data?.Products) {
+            const initialProducts: Record<number, SelectedProduct> = {}
+            data.Products.forEach((product) => {
+                initialProducts[product.product_id] = {
+                    product_id: product.product_id,
+                    condition_id: product.ArrivalProduct.condition_id,
+                    expected_quantity: product.ArrivalProduct.expected_quantity,
+                    isSelected: true
+                }
+            })
+            setSelectedProducts(initialProducts)
+        }
+    }, [data])
 
     const { data: products, isLoading: isProductsLoading } = useProducts({
         search: searchQuery || undefined
