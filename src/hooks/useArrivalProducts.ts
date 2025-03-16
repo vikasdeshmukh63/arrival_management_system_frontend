@@ -29,6 +29,6 @@ export const useArrivalProducts = (arrival_number: string) => {
         isError,
         scanProduct: scanProduct.mutate,
         isScanning: scanProduct.isPending,
-        isScanningError: scanProduct.isError
+        isScanningError: scanProduct.error
     }
 }

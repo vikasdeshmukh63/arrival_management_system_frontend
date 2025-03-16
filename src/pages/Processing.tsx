@@ -5,33 +5,24 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader } from '@/components/ui/card'
 import { useArrivalProducts } from '@/hooks/useArrivalProducts'
-import { ItemInScanArea } from '@/lib/arrivalProducts'
-import { DetailedArrivalProduct } from '@/lib/arrivals'
-import React, { useEffect, useRef, useState } from 'react'
+import { DetailedArrivalProduct, ItemInScanArea } from '@/lib/arrivalProducts'
+import React, { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-
-interface Item {
-    id: number
-    value: string
-}
 
 const Processing = () => {
     const { arrival_number } = useParams()
-    const [scannedItem, setScannedItem] = useState<ItemInScanArea | null>(null)
-    const [itemsToScan, setItemsToScan] = useState<DetailedArrivalProduct[]>([])
+
     const [itemInScanArea, setItemInScanArea] = useState<DetailedArrivalProduct | null>(null)
     const dragItem = useRef<HTMLDivElement>(null)
     const dragContainer = useRef<HTMLDivElement>(null)
 
     const { data, scanProduct, isScanning, isScanningError } = useArrivalProducts(arrival_number as string)
-
-    console.log(itemInScanArea)
     const handleScan = () => {
         if (!itemInScanArea) return
         scanProduct({
             scanned_product: {
                 condition_id: itemInScanArea.condition_id,
-                received_quantity: itemInScanArea.received_quantity + 1,
+                received_quantity: 1,
                 product_id: itemInScanArea.product_id
             }
         })
@@ -45,7 +36,7 @@ const Processing = () => {
         setItemInScanArea(null)
     }
 
-    const handleDragStart = (e: React.DragEvent<HTMLDivElement>, item: Item) => {
+    const handleDragStart = (e: React.DragEvent<HTMLDivElement>, item: DetailedArrivalProduct) => {
         if (e.currentTarget instanceof HTMLElement) {
             e.currentTarget.style.opacity = '0.5'
         }
@@ -77,10 +68,9 @@ const Processing = () => {
             e.currentTarget.style.backgroundColor = ''
             const droppedData = e.dataTransfer.getData('text/plain')
             try {
-                const item = JSON.parse(droppedData) as ItemInScanArea
+                const item = JSON.parse(droppedData) as DetailedArrivalProduct
                 if (itemInScanArea) return // Only allow one item in scan area
                 setItemInScanArea(item)
-                setItemsToScan((prev) => prev.filter((i) => i.id !== item.id))
             } catch (error) {
                 console.error('Invalid item data')
             }
@@ -165,6 +155,7 @@ const Processing = () => {
                                 Cancel
                             </Button>
                         </div>
+                        {isScanningError && <p className="text-red-500">{isScanningError.response.data.message  || 'Error scanning product'}</p>}
                     </div>
 
                     {/* products to scan  */}
