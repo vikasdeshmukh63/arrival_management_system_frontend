@@ -1,5 +1,4 @@
-import React from 'react'
-import { Card, CardContent, CardHeader } from '../ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
 const CountCards = ({ icon, title, count, percentage }: { icon: React.ReactNode; title: string; count: number; percentage: number }) => {
     return (

@@ -1,20 +1,20 @@
-import { Color } from '@/lib/color'
+import { Button } from '@/components/ui/button'
+import { Card, CardFooter, CardHeader } from '@/components/ui/card'
+import { Brand } from '@/lib/brand'
 import { useState } from 'react'
-import { Button } from '../ui/button'
-import { Card, CardFooter, CardHeader } from '../ui/card'
-import DeleteModal from './DeleteModal'
+import DeleteModal from '../DeleteModal'
 
-const ColorCard = ({ color, handleOpenEditDrawer }: { color: Color; handleOpenEditDrawer: (color: Color) => void }) => {
+const BrandCard = ({ brand, handleOpenEditDrawer }: { brand: Brand; handleOpenEditDrawer: (brand: Brand) => void }) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
 
     return (
         <Card className="relative">
-            <CardHeader>{color.name}</CardHeader>
+            <CardHeader>{brand.name}</CardHeader>
 
             <CardFooter className="flex justify-between items-center">
                 <Button
                     variant="outline"
-                    onClick={() => handleOpenEditDrawer(color)}>
+                    onClick={() => handleOpenEditDrawer(brand)}>
                     Edit
                 </Button>
                 <Button
@@ -29,12 +29,12 @@ const ColorCard = ({ color, handleOpenEditDrawer }: { color: Color; handleOpenEd
                 <DeleteModal
                     open={openDeleteModal}
                     setOpen={setOpenDeleteModal}
-                    type="color"
-                    id={color.color_id}
+                    type="brand"
+                    id={brand.brand_id}
                 />
             )}
         </Card>
     )
 }
 
-export default ColorCard
+export default BrandCard

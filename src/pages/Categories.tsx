@@ -1,4 +1,4 @@
-import CategoryCard from '@/components/mycomponents/CategoryCard'
+import CategoryCard from '@/components/mycomponents/cards/CategoryCard'
 import { CustomPagination } from '@/components/mycomponents/CustomPagination'
 import CategoryDrawer from '@/components/mycomponents/drawers/CategoryDrawer'
 import { FilterToolbar } from '@/components/mycomponents/FilterToolbar'

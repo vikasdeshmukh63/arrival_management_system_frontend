@@ -1,8 +1,8 @@
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Supplier } from '@/lib/supplier'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
 import { useState } from 'react'
-import DeleteModal from './DeleteModal'
+import DeleteModal from '../DeleteModal'
 
 const SupplierCard = ({ supplier, handleOpenEditDrawer }: { supplier: Supplier; handleOpenEditDrawer: (supplier: Supplier) => void }) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false)

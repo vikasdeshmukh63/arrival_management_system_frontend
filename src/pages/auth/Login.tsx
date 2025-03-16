@@ -9,6 +9,7 @@ import { Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 const loginSchema = z.object({
@@ -34,7 +35,7 @@ const Login = () => {
         try {
             login(data)
         } catch (error) {
-            console.error(error)
+            toast.error(error instanceof Error ? error.message : 'Login failed')
         }
     }
 

@@ -1,4 +1,4 @@
-import BrandCard from '@/components/mycomponents/BrandCard'
+import BrandCard from '@/components/mycomponents/cards/BrandCard'
 import { CustomPagination } from '@/components/mycomponents/CustomPagination'
 import BrandDrawer from '@/components/mycomponents/drawers/BrandDrawer'
 import { FilterToolbar } from '@/components/mycomponents/FilterToolbar'

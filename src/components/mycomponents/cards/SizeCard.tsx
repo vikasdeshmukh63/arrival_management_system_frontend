@@ -1,21 +1,20 @@
-import { Category } from '@/lib/category'
+import { Button } from '@/components/ui/button'
+import { Card, CardFooter, CardHeader } from '@/components/ui/card'
+import { Size } from '@/lib/size'
 import { useState } from 'react'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
-import DeleteModal from './DeleteModal'
+import DeleteModal from '../DeleteModal'
 
-const CategoryCard = ({ category, handleOpenEditDrawer }: { category: Category; handleOpenEditDrawer: (category: Category) => void }) => {
+const SizeCard = ({ size, handleOpenEditDrawer }: { size: Size; handleOpenEditDrawer: (size: Size) => void }) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
 
     return (
         <Card className="relative">
-            <CardHeader>{category.name}</CardHeader>
-            <CardContent className="text-sm text-gray-500">{category.description}</CardContent>
+            <CardHeader>{size.name}</CardHeader>
 
             <CardFooter className="flex justify-between items-center">
                 <Button
                     variant="outline"
-                    onClick={() => handleOpenEditDrawer(category)}>
+                    onClick={() => handleOpenEditDrawer(size)}>
                     Edit
                 </Button>
                 <Button
@@ -30,12 +29,12 @@ const CategoryCard = ({ category, handleOpenEditDrawer }: { category: Category; 
                 <DeleteModal
                     open={openDeleteModal}
                     setOpen={setOpenDeleteModal}
-                    type="category"
-                    id={category.category_id}
+                    type="size"
+                    id={size.size_id}
                 />
             )}
         </Card>
     )
 }
 
-export default CategoryCard
+export default SizeCard

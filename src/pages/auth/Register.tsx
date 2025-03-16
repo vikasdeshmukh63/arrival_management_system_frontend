@@ -3,6 +3,7 @@ import { ModeToggle } from '@/components/mycomponents/mode-toggle'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useAuth } from '@/hooks/useAuth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
@@ -28,6 +29,7 @@ type RegisterFormData = z.infer<typeof registerSchema>
 const Register = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const { register: registerMutation, isRegistering, registerError } = useAuth()
     const {
         register,
         handleSubmit,
@@ -38,23 +40,15 @@ const Register = () => {
 
     const onSubmit = async (data: RegisterFormData) => {
         try {
-            // TODO: Implement actual registration logic here
-            console.log('Registration data:', data)
-            toast.success('Registration successful')
+            registerMutation(data)
         } catch (error) {
-            console.error('Registration error:', error)
-            toast.error('Registration failed')
+            toast.error(error instanceof Error ? error.message : 'Registration failed')
         }
     }
 
     return (
         <div className="flex items-center justify-center h-screen relative">
             <Logo />
-            <img
-                src="./logo.svg"
-                alt=""
-                className="absolute top-5 left-5"
-            />
             <ModeToggle className="absolute top-4 right-4" />
             {/* left  */}
             <div className="w-full md:w-1/2 h-full p-4 md:p-10 flex flex-col items-center justify-center">
@@ -64,6 +58,11 @@ const Register = () => {
                 <form
                     className="flex flex-col gap-3 w-full max-w-md md:w-2/4 border border-gray-300 rounded-lg p-4"
                     onSubmit={handleSubmit(onSubmit)}>
+                    {registerError && (
+                        <div className="text-sm text-red-500 mb-2">
+                            {registerError instanceof Error ? registerError.message : 'Registration failed'}
+                        </div>
+                    )}
                     {/* name */}
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="name">Full Name</Label>
@@ -130,8 +129,9 @@ const Register = () => {
                     {/* register button */}
                     <Button
                         type="submit"
+                        disabled={isRegistering}
                         className="mt-4">
-                        Register
+                        {isRegistering ? 'Registering...' : 'Register'}
                     </Button>
                 </form>
                 {/* login link */}

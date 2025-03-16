@@ -1,8 +1,8 @@
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Condition } from '@/lib/condition'
 import { useState } from 'react'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
-import DeleteModal from './DeleteModal'
+import DeleteModal from '../DeleteModal'
 
 const ConditionCard = ({ condition, handleOpenEditDrawer }: { condition: Condition; handleOpenEditDrawer: (condition: Condition) => void }) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false)

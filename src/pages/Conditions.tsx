@@ -1,5 +1,4 @@
 import { Condition, CreateCondition } from '@/lib/condition'
-import ConditionCard from '@/components/mycomponents/ConditionCard'
 import { CustomPagination } from '@/components/mycomponents/CustomPagination'
 import ConditionDrawer from '@/components/mycomponents/drawers/ConditionDrawer'
 import { FilterToolbar } from '@/components/mycomponents/FilterToolbar'
@@ -11,6 +10,7 @@ import { useConditions } from '@/hooks/useConditions'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
+import ConditionCard from '@/components/mycomponents/cards/ConditionCard'
 
 const Conditions = () => {
     const [searchParams] = useSearchParams()

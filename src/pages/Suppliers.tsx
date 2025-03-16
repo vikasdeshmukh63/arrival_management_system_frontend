@@ -1,10 +1,10 @@
+import SupplierCard from '@/components/mycomponents/cards/SupplierCard'
 import { CustomPagination } from '@/components/mycomponents/CustomPagination'
 import SupplierDrawer from '@/components/mycomponents/drawers/SupplierDrawer'
 import { FilterToolbar } from '@/components/mycomponents/FilterToolbar'
 import LoaderComponent from '@/components/mycomponents/Loader'
 import NoData from '@/components/mycomponents/NoData'
 import PageHeader from '@/components/mycomponents/PageHeader'
-import SupplierCard from '@/components/mycomponents/SupplierCard'
 import Layout from '@/components/mycomponents/wrappers/Layout'
 import { useSupplier } from '@/hooks/useSupplier'
 

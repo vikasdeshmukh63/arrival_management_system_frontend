@@ -1,9 +1,9 @@
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Product } from '@/lib/products'
-import { Badge } from '../ui/badge'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
 import { useState } from 'react'
-import DeleteModal from './DeleteModal'
+import DeleteModal from '../DeleteModal'
 
 const ProductCard = ({ product, handleOpenEditDrawer }: { product: Product; handleOpenEditDrawer: (product: Product) => void }) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false)

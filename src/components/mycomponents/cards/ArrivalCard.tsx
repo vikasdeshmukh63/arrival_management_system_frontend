@@ -1,14 +1,14 @@
-import { Product } from '@/lib/products'
-import { Badge } from '../ui/badge'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
-import { useMemo, useState } from 'react'
-import DeleteModal from './DeleteModal'
-import { Arrival } from '@/lib/arrivals'
-import { EArrivalStatus } from '@/constants/constants'
-import { Progress } from '../ui/progress'
-import { CreateArrival } from '@/lib/arrivals'
-import { useNavigate } from 'react-router-dom'
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Progress } from "@/components/ui/progress"
+import { EArrivalStatus } from "@/constants/constants"
+import { Arrival, CreateArrival } from "@/lib/arrivals"
+import { Product } from "@/lib/products"
+import { useMemo, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import DeleteModal from "../DeleteModal"
+
 
 const formatDate = (date: string | null) => {
     if (!date) return 'N/A'

@@ -1,5 +1,5 @@
 import { ArrivalChart } from '@/components/mycomponents/ArrivalChart'
-import CountCards from '@/components/mycomponents/CountCards'
+import CountCards from '@/components/mycomponents/cards/CountCards'
 import Layout from '@/components/mycomponents/wrappers/Layout'
 import { useCounts } from '@/hooks/useCounts'
 import { CircleSlash2, Loader, Package, PackageSearch, Truck, Users2 } from 'lucide-react'

@@ -1,6 +1,6 @@
 import FinishArrivalDrawer from '@/components/mycomponents/drawers/FinishArrivalDrawer'
 import PageHeader from '@/components/mycomponents/PageHeader'
-import ProcessProductCard from '@/components/mycomponents/ProcessProductCard'
+import ProcessProductCard from '@/components/mycomponents/cards/ProcessProductCard'
 import Layout from '@/components/mycomponents/wrappers/Layout'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'

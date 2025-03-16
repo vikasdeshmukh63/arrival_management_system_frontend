@@ -31,6 +31,7 @@ export const useAuth = () => {
             queryClient.setQueryData(['user'], data.user)
             // Invalidate and refetch to ensure we have fresh data
             await queryClient.invalidateQueries({ queryKey: ['user'] })
+            toast.success('Logged in successfully')
             // Navigate after state is updated
             navigate('/dashboard', { replace: true })
         }
@@ -43,6 +44,7 @@ export const useAuth = () => {
             queryClient.setQueryData(['user'], data.user)
             // Invalidate and refetch to ensure we have fresh data
             await queryClient.invalidateQueries({ queryKey: ['user'] })
+            toast.success('Registered successfully')
             // Navigate after state is updated
             navigate('/dashboard', { replace: true })
         }

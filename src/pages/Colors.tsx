@@ -1,4 +1,4 @@
-import ColorCard from '@/components/mycomponents/ColorCard'
+import ColorCard from '@/components/mycomponents/cards/ColorCard'
 import { CustomPagination } from '@/components/mycomponents/CustomPagination'
 import ColorDrawer from '@/components/mycomponents/drawers/ColorDrawer'
 import { FilterToolbar } from '@/components/mycomponents/FilterToolbar'

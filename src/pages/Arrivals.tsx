@@ -1,4 +1,4 @@
-import ArrivalCard from '@/components/mycomponents/ArrivalCard'
+import ArrivalCard from '@/components/mycomponents/cards/ArrivalCard'
 import { CustomPagination } from '@/components/mycomponents/CustomPagination'
 import ArrivalDrawer from '@/components/mycomponents/drawers/ArrivalDrawer'
 import StartProcessingDrawer from '@/components/mycomponents/drawers/StartProcessingDrawer'
