@@ -1,3 +1,4 @@
+import FinishArrivalDrawer from '@/components/mycomponents/drawers/FinishArrivalDrawer'
 import PageHeader from '@/components/mycomponents/PageHeader'
 import ProcessProductCard from '@/components/mycomponents/ProcessProductCard'
 import Layout from '@/components/mycomponents/wrappers/Layout'
@@ -5,9 +6,14 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader } from '@/components/ui/card'
 import { useArrivalProducts } from '@/hooks/useArrivalProducts'
-import { DetailedArrivalProduct, ItemInScanArea } from '@/lib/arrivalProducts'
+import { DetailedArrivalProduct, FinishProcessingResponse } from '@/lib/arrivalProducts'
+import { AxiosError } from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
+import { Loader } from 'lucide-react'
+import { useArrival } from '@/hooks/useArrivals'
+import { EArrivalStatus } from '@/constants/constants'
 
 const Processing = () => {
     const { arrival_number } = useParams()
@@ -16,8 +22,22 @@ const Processing = () => {
     const dragItem = useRef<HTMLDivElement>(null)
     const dragContainer = useRef<HTMLDivElement>(null)
 
-    const { data, scanProduct, isScanning, isScanningError, finishProcessing, isFinishingProcessing, isFinishingProcessingError } =
-        useArrivalProducts(arrival_number as string)
+    const navigate = useNavigate()
+
+    const [finishArrivalData, setFinishArrivalData] = useState<FinishProcessingResponse | null>(null)
+    const [openFinishArrivalDrawer, setOpenFinishArrivalDrawer] = useState(false)
+
+    const { data, isLoading, scanProduct, isScanning, isScanningError, finishProcessing, isFinishingProcessingError } = useArrivalProducts(
+        arrival_number as string
+    )
+    const { arrival, isLoading: isArrivalLoading } = useArrival(arrival_number as string)
+
+    useEffect(() => {
+        if (arrival && !isArrivalLoading && arrival.status !== EArrivalStatus.IN_PROGRESS) {
+            navigate('/arrivals')
+        }
+    }, [arrival, isArrivalLoading, navigate])
+
     const handleScan = () => {
         if (!itemInScanArea) return
 
@@ -74,7 +94,7 @@ const Processing = () => {
                 if (itemInScanArea) return // Only allow one item in scan area
                 setItemInScanArea(item)
             } catch (error) {
-                console.error('Invalid item data')
+                toast.error(error instanceof Error ? error.message : 'Error dropping product')
             }
         }
     }
@@ -83,8 +103,24 @@ const Processing = () => {
     useEffect(() => {
         if (data?.productsWithDiscrepancy.length === 0) {
             finishProcessing()
+                .then((data) => {
+                    setFinishArrivalData(data)
+                })
+                .then(() => {
+                    setOpenFinishArrivalDrawer(true)
+                })
         }
     }, [data?.productsWithDiscrepancy.length, finishProcessing])
+
+    const handleFinishArrival = () => {
+        finishProcessing()
+            .then((data) => {
+                setFinishArrivalData(data)
+            })
+            .then(() => {
+                setOpenFinishArrivalDrawer(true)
+            })
+    }
 
     return (
         <Layout>
@@ -93,20 +129,26 @@ const Processing = () => {
                     title={`Processing ${arrival_number}`}
                     description="Processing the arrival"
                     actionLabel="Finish Processing"
-                    onAction={() => {}}
+                    onAction={handleFinishArrival}
                 />
 
                 <div className="flex flex-col lg:flex-row justify-between items-center h-[90vh] mt-4 gap-6">
                     {/* processed  */}
                     <div className="h-full rounded-lg p-4 w-full lg:w-5/12 shadow-sm border border-gray-200 grid grid-cols-2 gap-4">
-                        {data?.productsWithoutDiscrepancy.map((product: DetailedArrivalProduct) => {
-                            return (
-                                <ProcessProductCard
-                                    key={product.arrival_product_id}
-                                    product={product}
-                                />
-                            )
-                        })}
+                        {isLoading ? (
+                            <div className="col-span-2 h-full flex items-center justify-center">
+                                <Loader className="animate-spin" />
+                            </div>
+                        ) : (
+                            data?.productsWithoutDiscrepancy.map((product: DetailedArrivalProduct) => {
+                                return (
+                                    <ProcessProductCard
+                                        key={product.arrival_product_id}
+                                        product={product}
+                                    />
+                                )
+                            })
+                        )}
                     </div>
 
                     {/* scan area  */}
@@ -164,23 +206,42 @@ const Processing = () => {
                                 Cancel
                             </Button>
                         </div>
-                        {isScanningError && <p className="text-red-500">{isScanningError.response.data.message || 'Error scanning product'}</p>}
+                        {isScanningError && isScanningError instanceof AxiosError && (
+                            <p className="text-red-500">{isScanningError.response?.data.message || 'Error scanning product'}</p>
+                        )}
+                        {isFinishingProcessingError && isFinishingProcessingError instanceof AxiosError && (
+                            <p className="text-red-500">{isFinishingProcessingError.response?.data.message || 'Error scanning product'}</p>
+                        )}
                     </div>
 
                     {/* products to scan  */}
                     <div className="h-full w-full lg:w-5/12 rounded-lg p-4 shadow-sm border border-gray-200 space-y-4 grid grid-cols-2 gap-4">
-                        {data?.productsWithDiscrepancy.map((product: DetailedArrivalProduct) => (
-                            <ProcessProductCard
-                                key={product.arrival_product_id}
-                                ref={product.arrival_product_id === 1 ? dragItem : undefined}
-                                product={product}
-                                right
-                                onDragStart={(e) => handleDragStart(e, product)}
-                                onDragEnd={handleDragEnd}
-                            />
-                        ))}
+                        {isLoading ? (
+                            <div className="col-span-2 h-full flex items-center justify-center">
+                                <Loader className="animate-spin" />
+                            </div>
+                        ) : (
+                            data?.productsWithDiscrepancy.map((product: DetailedArrivalProduct) => (
+                                <ProcessProductCard
+                                    key={product.arrival_product_id}
+                                    ref={product.arrival_product_id === 1 ? dragItem : undefined}
+                                    product={product}
+                                    right
+                                    onDragStart={(e) => handleDragStart(e, product)}
+                                    onDragEnd={handleDragEnd}
+                                />
+                            ))
+                        )}
                     </div>
                 </div>
+
+                {finishArrivalData && openFinishArrivalDrawer && (
+                    <FinishArrivalDrawer
+                        data={finishArrivalData}
+                        open={openFinishArrivalDrawer}
+                        onClose={() => setOpenFinishArrivalDrawer(false)}
+                    />
+                )}
             </div>
         </Layout>
     )

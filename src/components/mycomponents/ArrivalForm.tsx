@@ -63,7 +63,7 @@ const ArrivalForm = ({
         resolver: zodResolver(arrivalSchema)
     })
 
-    const { createArrival, createArrivalError, isCreating, updateArrival, updateArrivalError } = useArrivals()
+    const { createArrival, createArrivalError, isCreating, updateArrival, updateArrivalError, isUpdating } = useArrivals()
 
     const { data: supplierData } = useSupplier() as { data: SupplierResponse | undefined }
 
@@ -238,8 +238,8 @@ const ArrivalForm = ({
                 <Button
                     type="submit"
                     className="w-full"
-                    disabled={isCreating}>
-                    {isCreating ? <Loader className="animate-spin" /> : 'Submit'}
+                    disabled={isCreating || isUpdating}>
+                    {isCreating || isUpdating ? <Loader className="animate-spin" /> : 'Submit'}
                 </Button>
             </form>
             {createArrivalError && createArrivalError instanceof AxiosError && (

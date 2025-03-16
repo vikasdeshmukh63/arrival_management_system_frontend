@@ -93,8 +93,8 @@ export const arrivalApi = {
         const { data } = await axiosInstance.get<{ data: ArrivalResponse }>(`/api/arrivals/get-all${queryString}`)
         return data.data
     },
-    getArrivalById: async (arrival_id: number): Promise<Arrival> => {
-        const { data } = await axiosInstance.get<{ data: Arrival }>(`/api/arrivals/${arrival_id}`)
+    getArrivalById: async (arrival_number: string): Promise<Arrival> => {
+        const { data } = await axiosInstance.get<{ data: Arrival }>(`/api/arrivals/${arrival_number}`)
         return data.data
     },
     createArrival: async (arrival: CreateArrival): Promise<Arrival> => {

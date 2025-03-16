@@ -27,6 +27,7 @@ export const useArrivalProducts = (arrival_number: string) => {
         mutationFn: () => arrivalProductApi.finishProcessing(arrival_number),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['arrivalProducts', arrival_number] })
+            queryClient.invalidateQueries({ queryKey: ['arrivals'] })
             toast.success('Processing finished successfully')
         },
         onError: () => {
@@ -41,7 +42,7 @@ export const useArrivalProducts = (arrival_number: string) => {
         scanProduct: scanProduct.mutate,
         isScanning: scanProduct.isPending,
         isScanningError: scanProduct.error,
-        finishProcessing: finishProcessing.mutate,
+        finishProcessing: finishProcessing.mutateAsync,
         isFinishingProcessing: finishProcessing.isPending,
         isFinishingProcessingError: finishProcessing.error
     }

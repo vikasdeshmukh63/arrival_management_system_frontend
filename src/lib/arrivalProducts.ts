@@ -52,7 +52,7 @@ export interface FinishProcessingResponse {
     has_discrepancies: boolean
     discrepancies: {
         products: ProductDiscrepancy[] | null
-        boxes: BoxDiscrepancy[] | null
+        boxes: BoxDiscrepancy | null
     }
 }
 

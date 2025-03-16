@@ -94,15 +94,15 @@ export const useArrivals = (params?: ArrivalQueryParams) => {
     }
 }
 // Separate hook for getting a single arrival by ID
-export const useArrival = (arrival_id: number) => {
+export const useArrival = (arrival_number: string) => {
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['arrival', arrival_id],
-        queryFn: () => arrivalApi.getArrivalById(arrival_id),
+        queryKey: ['individual-arrival', arrival_number],
+        queryFn: () => arrivalApi.getArrivalById(arrival_number),
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 10,
-        enabled: !!arrival_id // Only run the query if we have an arrival_id
+        enabled: !!arrival_number // Only run the query if we have an arrival_id
     })
-
+    
     return {
         arrival: data,
         isLoading,
