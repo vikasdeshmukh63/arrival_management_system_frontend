@@ -53,9 +53,9 @@ const Categories = () => {
                 <div className="flex-1 p-2 sm:p-4 overflow-y-auto">
                     <div className="flex flex-col gap-4 w-full max-w-[2000px] mx-auto">
                         <PageHeader
-                            title="Brands"
-                            description="Manage your brands here"
-                            actionLabel="New Brand"
+                            title="Categories"
+                            description="Manage your categories here"
+                            actionLabel="New Category"
                             onAction={handleOpenCreateDrawer}
                             filters={<FilterToolbar />}
                         />
