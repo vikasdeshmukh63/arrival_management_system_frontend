@@ -1,6 +1,5 @@
 import axiosInstance from './axios-instance'
 import { Pagination, Product } from './products'
-import { SupplierQueryParams } from './supplier'
 
 export interface ArrivalQueryParams {
     order?: string

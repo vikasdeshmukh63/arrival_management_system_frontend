@@ -1,26 +1,26 @@
 import axiosInstance from './axios-instance'
 
-interface ProductCat {
+export interface ProductCat {
     category_id: number
     name: string
 }
 
-interface ProductStyle {
+export interface ProductStyle {
     style_id: number
     name: string
 }
 
-interface ProductColor {
+export interface ProductColor {
     color_id: number
     name: string
 }
 
-interface ProductSize {
+export interface ProductSize {
     size_id: number
     name: string
 }
 
-interface ProductBrand {
+export interface ProductBrand {
     brand_id: number
     name: string
 }
