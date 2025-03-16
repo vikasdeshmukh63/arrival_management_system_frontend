@@ -25,9 +25,20 @@ export interface DetailedArrivalProduct {
     }
 }
 
+export interface ItemInScanArea {
+    condition_id: number
+    received_quantity: number
+    product_id: number
+}
+
+
 const arrivalProductApi = {
     getArrivalProducts: async (arrival_number: string) => {
         const { data } = await axiosInstance.get(`/api/products/products-with-discrepancy/${arrival_number}`)
+        return data.data
+    },
+    scanProduct: async (arrival_number: string, scanned_product: ItemInScanArea) => {
+        const { data } = await axiosInstance.post(`/api/arrivals/scan/${arrival_number}`, scanned_product)
         return data.data
     }
 }

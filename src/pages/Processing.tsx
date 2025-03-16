@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader } from '@/components/ui/card'
 import { useArrivalProducts } from '@/hooks/useArrivalProducts'
+import { ItemInScanArea } from '@/lib/arrivalProducts'
 import { DetailedArrivalProduct } from '@/lib/arrivals'
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -16,30 +17,27 @@ interface Item {
 
 const Processing = () => {
     const { arrival_number } = useParams()
-    const [isScanning, setIsScanning] = useState(false)
-    const [scannedItem, setScannedItem] = useState<string | null>(null)
-    const [itemsToScan, setItemsToScan] = useState<Item[]>([
-        { id: 1, value: '1' },
-        { id: 2, value: '2' },
-        { id: 3, value: '3' },
-        { id: 4, value: '4' }
-    ])
+    const [scannedItem, setScannedItem] = useState<ItemInScanArea | null>(null)
+    const [itemsToScan, setItemsToScan] = useState<DetailedArrivalProduct[]>([])
     const [itemInScanArea, setItemInScanArea] = useState<DetailedArrivalProduct | null>(null)
     const dragItem = useRef<HTMLDivElement>(null)
     const dragContainer = useRef<HTMLDivElement>(null)
 
-    const { data } = useArrivalProducts(arrival_number as string)
-    console.log(data)
+    const { data, scanProduct, isScanning, isScanningError } = useArrivalProducts(arrival_number as string)
 
+    console.log(itemInScanArea)
     const handleScan = () => {
         if (!itemInScanArea) return
-
-        setIsScanning(true)
-        setTimeout(() => {
-            setIsScanning(false)
-            setScannedItem(itemInScanArea.value)
+        scanProduct({
+            scanned_product: {
+                condition_id: itemInScanArea.condition_id,
+                received_quantity: itemInScanArea.received_quantity + 1,
+                product_id: itemInScanArea.product_id
+            }
+        })
+        if (!isScanning) {
             setItemInScanArea(null)
-        }, 5000)
+        }
     }
 
     const handleCancel = () => {
@@ -79,7 +77,7 @@ const Processing = () => {
             e.currentTarget.style.backgroundColor = ''
             const droppedData = e.dataTransfer.getData('text/plain')
             try {
-                const item = JSON.parse(droppedData) as Item
+                const item = JSON.parse(droppedData) as ItemInScanArea
                 if (itemInScanArea) return // Only allow one item in scan area
                 setItemInScanArea(item)
                 setItemsToScan((prev) => prev.filter((i) => i.id !== item.id))
