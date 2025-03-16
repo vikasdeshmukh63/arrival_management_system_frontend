@@ -64,9 +64,9 @@ const ArrivalCard = ({
         handleOpenEditDrawer(arrival)
     }
 
-    const { progress, discrepancy } = useMemo(() => {
+    const { progress, discrepancy, boxDiscrepancy } = useMemo(() => {
         if (!arrival.Products || arrival.Products.length === 0) {
-            return { progress: 0, discrepancy: 0 }
+            return { progress: 0, discrepancy: 0, boxDiscrepancy: 0 }
         }
 
         let totalExpectedQuantity = 0
@@ -78,17 +78,19 @@ const ArrivalCard = ({
         })
 
         if (totalExpectedQuantity === 0) {
-            return { progress: 0, discrepancy: 0 }
+            return { progress: 0, discrepancy: 0, boxDiscrepancy: 0 }
         }
 
         const calculatedProgress = Math.round((totalReceivedQuantity / totalExpectedQuantity) * 100)
         const calculatedDiscrepancy = totalReceivedQuantity - totalExpectedQuantity
+        const calculatedBoxDiscrepancy = arrival.received_boxes - arrival.expected_boxes
 
         return {
             progress: calculatedProgress,
-            discrepancy: calculatedDiscrepancy
+            discrepancy: calculatedDiscrepancy,
+            boxDiscrepancy: calculatedBoxDiscrepancy
         }
-    }, [arrival.Products])
+    }, [arrival.Products, arrival.received_boxes, arrival.expected_boxes])
 
     const handleStartProcessing = () => {
         setArrivalToStartProcessing(arrival.arrival_number)
@@ -119,10 +121,16 @@ const ArrivalCard = ({
                         <span>{formatStatus(arrival.status)}</span>
                     </p>
                     {arrival.status === EArrivalStatus.COMPLETED_WITH_DISCREPANCY && (
-                        <span className="text-sm text-gray-500 col-span-1">
-                            <span className="font-bold">Discrepancy :</span> <br />
-                            {discrepancy > 0 ? `+${discrepancy} (excess)` : `${discrepancy} (missing)`} items
-                        </span>
+                        <div className="text-sm text-gray-500 col-span-1 flex flex-col gap-2">
+                            <span>
+                                <span className="font-bold">Items Discrepancy:</span> <br />
+                                {discrepancy > 0 ? `+${discrepancy} (excess)` : `${discrepancy} (missing)`} items
+                            </span>
+                            <span>
+                                <span className="font-bold">Boxes Discrepancy:</span> <br />
+                                {boxDiscrepancy > 0 ? `+${boxDiscrepancy} (excess)` : `${boxDiscrepancy} (missing)`} boxes
+                            </span>
+                        </div>
                     )}
                 </div>
             </CardContent>

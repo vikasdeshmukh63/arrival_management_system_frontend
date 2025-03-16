@@ -23,12 +23,26 @@ export const useArrivalProducts = (arrival_number: string) => {
         }
     })
 
+    const finishProcessing = useMutation({
+        mutationFn: () => arrivalProductApi.finishProcessing(arrival_number),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['arrivalProducts', arrival_number] })
+            toast.success('Processing finished successfully')
+        },
+        onError: () => {
+            toast.error('Failed to finish processing')
+        }
+    })
+
     return {
         data,
         isLoading,
         isError,
         scanProduct: scanProduct.mutate,
         isScanning: scanProduct.isPending,
-        isScanningError: scanProduct.error
+        isScanningError: scanProduct.error,
+        finishProcessing: finishProcessing.mutate,
+        isFinishingProcessing: finishProcessing.isPending,
+        isFinishingProcessingError: finishProcessing.error
     }
 }

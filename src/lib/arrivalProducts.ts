@@ -31,6 +31,30 @@ export interface ItemInScanArea {
     product_id: number
 }
 
+export interface ProductDiscrepancy {
+    product_id: number
+    product_name: string
+    product_sku: string
+    expected_quantity: number
+    received_quantity: number
+    difference: number
+}
+
+export interface BoxDiscrepancy {
+    expected_boxes: number
+    received_boxes: number
+    difference: number
+}
+
+export interface FinishProcessingResponse {
+    arrival_number: string
+    status: string
+    has_discrepancies: boolean
+    discrepancies: {
+        products: ProductDiscrepancy[] | null
+        boxes: BoxDiscrepancy[] | null
+    }
+}
 
 const arrivalProductApi = {
     getArrivalProducts: async (arrival_number: string) => {
@@ -39,6 +63,10 @@ const arrivalProductApi = {
     },
     scanProduct: async (arrival_number: string, scanned_product: ItemInScanArea) => {
         const { data } = await axiosInstance.post(`/api/arrivals/scan/${arrival_number}`, scanned_product)
+        return data.data
+    },
+    finishProcessing: async (arrival_number: string) => {
+        const { data } = await axiosInstance.post(`/api/arrivals/finish-processing/${arrival_number}`)
         return data.data
     }
 }

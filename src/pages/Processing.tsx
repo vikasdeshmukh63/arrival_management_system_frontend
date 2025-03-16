@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardHeader } from '@/components/ui/card'
 import { useArrivalProducts } from '@/hooks/useArrivalProducts'
 import { DetailedArrivalProduct, ItemInScanArea } from '@/lib/arrivalProducts'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 const Processing = () => {
@@ -16,9 +16,11 @@ const Processing = () => {
     const dragItem = useRef<HTMLDivElement>(null)
     const dragContainer = useRef<HTMLDivElement>(null)
 
-    const { data, scanProduct, isScanning, isScanningError } = useArrivalProducts(arrival_number as string)
+    const { data, scanProduct, isScanning, isScanningError, finishProcessing, isFinishingProcessing, isFinishingProcessingError } =
+        useArrivalProducts(arrival_number as string)
     const handleScan = () => {
         if (!itemInScanArea) return
+
         scanProduct({
             scanned_product: {
                 condition_id: itemInScanArea.condition_id,
@@ -76,6 +78,13 @@ const Processing = () => {
             }
         }
     }
+
+    // when all products are scanned, finish processing
+    useEffect(() => {
+        if (data?.productsWithDiscrepancy.length === 0) {
+            finishProcessing()
+        }
+    }, [data?.productsWithDiscrepancy.length, finishProcessing])
 
     return (
         <Layout>
@@ -155,7 +164,7 @@ const Processing = () => {
                                 Cancel
                             </Button>
                         </div>
-                        {isScanningError && <p className="text-red-500">{isScanningError.response.data.message  || 'Error scanning product'}</p>}
+                        {isScanningError && <p className="text-red-500">{isScanningError.response.data.message || 'Error scanning product'}</p>}
                     </div>
 
                     {/* products to scan  */}
