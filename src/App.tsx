@@ -24,6 +24,7 @@ import Sizes from './pages/Sizes'
 import Styles from './pages/Styles'
 import Suppliers from './pages/Suppliers'
 import Logout from './pages/Logout'
+import Processing from './pages/Processing'
 const queryClient = new QueryClient()
 
 function App() {
@@ -154,6 +155,14 @@ function App() {
                             element={
                                 <PrivateRoute>
                                     <Logout />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/arrivals/processing/:arrival_number"
+                            element={
+                                <PrivateRoute>
+                                    <Processing />
                                 </PrivateRoute>
                             }
                         />

@@ -8,6 +8,7 @@ import { Arrival } from '@/lib/arrivals'
 import { EArrivalStatus } from '@/constants/constants'
 import { Progress } from '../ui/progress'
 import { CreateArrival } from '@/lib/arrivals'
+import { useNavigate } from 'react-router-dom'
 
 const formatDate = (date: string | null) => {
     if (!date) return 'N/A'
@@ -27,14 +28,20 @@ const formatStatus = (status: string) => {
 const ArrivalCard = ({
     arrival,
     handleOpenEditDrawer,
-    setCreatedArrival
+    setCreatedArrival,
+    setArrivalToStartProcessing,
+    setStartProcessingDrawerOpen
 }: {
     arrival: Arrival
     handleOpenEditDrawer: (arrival: Arrival) => void
     setCreatedArrival: (arrival: (CreateArrival & { arrival_number: string }) | null) => void
+    setArrivalToStartProcessing: (arrival_number: string) => void
+    setStartProcessingDrawerOpen: (open: boolean) => void
 }) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
+
+    const navigate = useNavigate()
 
     const handleEditArrival = () => {
         const arrivalToEdit: CreateArrival & { arrival_number: string } = {
@@ -83,6 +90,11 @@ const ArrivalCard = ({
         }
     }, [arrival.Products])
 
+    const handleStartProcessing = () => {
+        setArrivalToStartProcessing(arrival.arrival_number)
+        setStartProcessingDrawerOpen(true)
+    }
+
     return (
         <Card className="relative">
             <CardHeader className="mt-2">{arrival.title}</CardHeader>
@@ -130,7 +142,9 @@ const ArrivalCard = ({
                 )}
 
                 {arrival.status === EArrivalStatus.UPCOMING && (
-                    <div className="w-full">
+                    <div
+                        className="w-full"
+                        onClick={handleStartProcessing}>
                         <Button className="w-full">Start Processing</Button>
                     </div>
                 )}
@@ -143,7 +157,8 @@ const ArrivalCard = ({
                         {isHovered ? (
                             <Button
                                 variant="default"
-                                className="w-full">
+                                className="w-full"
+                                onClick={() => navigate(`/arrivals/processing/${arrival.arrival_number}`)}>
                                 Continue Processing
                             </Button>
                         ) : (

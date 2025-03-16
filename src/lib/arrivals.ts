@@ -67,6 +67,13 @@ export interface ArrivalProduct {
     condition_id: number
 }
 
+export interface StartProcessing {
+    received_pallets?: number
+    received_boxes: number
+    received_pieces?: number
+    received_kilograms?: number
+}
+
 export const arrivalApi = {
     getArrivals: async (params?: ArrivalQueryParams): Promise<ArrivalResponse> => {
         const queryString = params
@@ -105,6 +112,13 @@ export const arrivalApi = {
     },
     addProductsToArrival: async (arrival_number: string, arrival_products: ArrivalProduct[]): Promise<number[]> => {
         const { data } = await axiosInstance.post<{ data: number[] }>(`/api/arrivals/add-products/${arrival_number}`, { arrival_products })
+        return data.data
+    },
+    startProcessing: async (arrival_number: string, arrival_data: StartProcessing): Promise<{ arrival_number: string; status: string }> => {
+        const { data } = await axiosInstance.post<{ data: { arrival_number: string; status: string } }>(
+            `/api/arrivals/start-processing/${arrival_number}`,
+            arrival_data
+        )
         return data.data
     }
 }

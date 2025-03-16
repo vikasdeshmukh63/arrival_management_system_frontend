@@ -1,6 +1,7 @@
 import ArrivalCard from '@/components/mycomponents/ArrivalCard'
 import { CustomPagination } from '@/components/mycomponents/CustomPagination'
 import ArrivalDrawer from '@/components/mycomponents/drawers/ArrivalDrawer'
+import StartProcessingDrawer from '@/components/mycomponents/drawers/StartProcessingDrawer'
 import { FilterToolbar } from '@/components/mycomponents/FilterToolbar'
 import LoaderComponent from '@/components/mycomponents/Loader'
 import NoData from '@/components/mycomponents/NoData'
@@ -18,6 +19,8 @@ const Arrivals = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const [arrivalToEdit, setArrivalToEdit] = useState<(CreateArrival & { arrival_number: string }) | null>(null)
     const [createdArrival, setCreatedArrival] = useState<(CreateArrival & { arrival_number: string }) | null>(null)
+    const [startProcessingDrawerOpen, setStartProcessingDrawerOpen] = useState(false)
+    const [arrivalToStartProcessing, setArrivalToStartProcessing] = useState<string | null>(null)
 
     const { data, isLoading, isError } = useArrivals({
         page: parseInt(searchParams.get('page') || '1'),
@@ -60,7 +63,6 @@ const Arrivals = () => {
         setIsDrawerOpen(true)
     }
 
-
     return (
         <Layout>
             {/* Use flex-col and min-h-full to ensure full height */}
@@ -87,6 +89,8 @@ const Arrivals = () => {
                                         arrival={arrival}
                                         handleOpenEditDrawer={handleOpenEditDrawer}
                                         setCreatedArrival={setCreatedArrival}
+                                        setArrivalToStartProcessing={setArrivalToStartProcessing}
+                                        setStartProcessingDrawerOpen={setStartProcessingDrawerOpen}
                                     />
                                 ))}
                             </div>
@@ -112,6 +116,14 @@ const Arrivals = () => {
                     setCreatedArrival={setCreatedArrival}
                     createdArrival={createdArrival}
                     data={arrivalToEdit}
+                />
+            )}
+
+            {startProcessingDrawerOpen && (
+                <StartProcessingDrawer
+                    isOpen={startProcessingDrawerOpen}
+                    onClose={() => setStartProcessingDrawerOpen(false)}
+                    arrivalToStartProcessing={arrivalToStartProcessing}
                 />
             )}
         </Layout>

@@ -1,8 +1,10 @@
-import { arrivalApi, ArrivalQueryParams, CreateArrival, ArrivalProduct } from '@/lib/arrivals'
+import { arrivalApi, ArrivalQueryParams, CreateArrival, ArrivalProduct, StartProcessing } from '@/lib/arrivals'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 export const useArrivals = (params?: ArrivalQueryParams) => {
+    const navigate = useNavigate()
     const queryClient = useQueryClient()
     const { data, isLoading, isError } = useQuery({
         queryKey: ['arrivals', params],
@@ -57,6 +59,19 @@ export const useArrivals = (params?: ArrivalQueryParams) => {
         }
     })
 
+    const startProcessingMutation = useMutation({
+        mutationFn: ({ arrival_number, arrival_data }: { arrival_number: string; arrival_data: StartProcessing }) =>
+            arrivalApi.startProcessing(arrival_number, arrival_data),
+        onSuccess: async (data) => {
+            await queryClient.invalidateQueries({ queryKey: ['arrivals'] })
+            navigate(`/arrivals/processing/${data.arrival_number}`)
+            toast.success('Processing started successfully')
+        },
+        onError: (error) => {
+            toast.error(error.message)
+        }
+    })
+
     return {
         data,
         isLoading,
@@ -72,7 +87,10 @@ export const useArrivals = (params?: ArrivalQueryParams) => {
         deleteArrival: deleteArrivalMutation.mutate,
         addProductsToArrival: addProductsToArrivalMutation.mutate,
         isAddingProducts: addProductsToArrivalMutation.isPending,
-        addProductsToArrivalError: addProductsToArrivalMutation.error
+        addProductsToArrivalError: addProductsToArrivalMutation.error,
+        startProcessing: startProcessingMutation.mutateAsync,
+        isStartingProcessing: startProcessingMutation.isPending,
+        startProcessingError: startProcessingMutation.error
     }
 }
 // Separate hook for getting a single arrival by ID
