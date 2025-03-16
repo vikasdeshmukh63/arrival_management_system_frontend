@@ -1,9 +1,8 @@
-import { Size } from '@/lib/size'
+import { Style } from '@/lib/style'
 import { useState } from 'react'
 import { Button } from '../ui/button'
 import { Card, CardFooter, CardHeader } from '../ui/card'
 import DeleteModal from './DeleteModal'
-import { Style } from '@/lib/style'
 
 const StyleCard = ({ style, handleOpenEditDrawer }: { style: Style; handleOpenEditDrawer: (style: Style) => void }) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false)

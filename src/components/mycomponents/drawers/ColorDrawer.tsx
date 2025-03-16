@@ -2,9 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import { useBrands } from '@/hooks/useBrands'
 import { useColors } from '@/hooks/useColors'
-import { CreateBrand } from '@/lib/brand'
 import { CreateColor } from '@/lib/color'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
@@ -13,11 +11,11 @@ import { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-const brandSchema = z.object({
+const colorSchema = z.object({
     name: z.string().min(1, 'Name is required')
 })
 
-type BrandFormData = z.infer<typeof brandSchema>
+type ColorFormData = z.infer<typeof colorSchema>
 
 const ColorDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () => void; data?: (CreateColor & { color_id: number }) | null }) => {
     const submitRef = useRef<HTMLButtonElement>(null)
@@ -27,10 +25,9 @@ const ColorDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =
         register,
         handleSubmit,
         formState: { errors },
-        control,
         reset
-    } = useForm<BrandFormData>({
-        resolver: zodResolver(brandSchema)
+    } = useForm<ColorFormData>({
+        resolver: zodResolver(colorSchema)
     })
 
     const { createColor, isCreatingColor, createColorError, updateColor, isUpdatingColor, updateColorError } = useColors()
@@ -45,7 +42,7 @@ const ColorDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =
         }
     }, [isCreatingColor, createColorError, onClose, reset, updateColorError])
 
-    const onSubmit = async (formData: BrandFormData) => {
+    const onSubmit = async (formData: ColorFormData) => {
         try {
             isSubmittingRef.current = true
             if (!data) {

@@ -35,7 +35,6 @@ const ConditionDrawer = ({
         register,
         handleSubmit,
         formState: { errors },
-        control,
         reset
     } = useForm<ConditionFormData>({
         resolver: zodResolver(conditionSchema)

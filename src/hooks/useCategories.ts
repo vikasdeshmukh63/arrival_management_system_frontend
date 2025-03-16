@@ -1,4 +1,4 @@
-import { Category, categoryApi, CategoryQueryParams, CreateCategory } from '@/lib/category'
+import { categoryApi, CategoryQueryParams, CreateCategory } from '@/lib/category'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 

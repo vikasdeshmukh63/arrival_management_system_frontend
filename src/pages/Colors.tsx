@@ -15,7 +15,7 @@ import { toast } from 'sonner'
 const Colors = () => {
     const [searchParams] = useSearchParams()
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-    const [colorToEdit, setColorToEdit] = useState<CreateColor | null>(null)
+    const [colorToEdit, setColorToEdit] = useState<(CreateColor & { color_id: number }) | null>(null)
 
     const { data, isLoading, isError } = useColors({
         page: parseInt(searchParams.get('page') || '1'),

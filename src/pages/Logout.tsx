@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react'
-import { useAuth } from '@/hooks/useAuth'
-import LoaderComponent from '@/components/mycomponents/Loader'
 import Layout from '@/components/mycomponents/wrappers/Layout'
+import { useAuth } from '@/hooks/useAuth'
 import { Loader } from 'lucide-react'
+import { useEffect } from 'react'
 
 const Logout = () => {
     const { logout } = useAuth()

@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label'
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Textarea } from '@/components/ui/textarea'
 import { useCategories } from '@/hooks/useCategories'
+import { CreateCategory } from '@/lib/category'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
 import { Loader } from 'lucide-react'
@@ -34,7 +35,6 @@ const CategoryDrawer = ({
         register,
         handleSubmit,
         formState: { errors },
-        control,
         reset
     } = useForm<CategoryFormData>({
         resolver: zodResolver(categorySchema)

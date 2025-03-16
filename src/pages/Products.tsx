@@ -15,7 +15,7 @@ import { toast } from 'sonner'
 const Products = () => {
     const [searchParams] = useSearchParams()
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-    const [productToEdit, setProductToEdit] = useState<CreateProduct | null>(null)
+    const [productToEdit, setProductToEdit] = useState<(CreateProduct & { tsku: string }) | null>(null)
 
     const { data, isLoading, isError } = useProducts({
         page: parseInt(searchParams.get('page') || '1'),

@@ -25,7 +25,6 @@ const SizeDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =>
         register,
         handleSubmit,
         formState: { errors },
-        control,
         reset
     } = useForm<BrandFormData>({
         resolver: zodResolver(brandSchema)

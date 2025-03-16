@@ -6,7 +6,6 @@ import LoaderComponent from '@/components/mycomponents/Loader'
 import NoData from '@/components/mycomponents/NoData'
 import PageHeader from '@/components/mycomponents/PageHeader'
 import Layout from '@/components/mycomponents/wrappers/Layout'
-import { useBrands } from '@/hooks/useBrands'
 import { useCategories } from '@/hooks/useCategories'
 import { Category, CreateCategory } from '@/lib/category'
 import { useEffect, useState } from 'react'
@@ -16,7 +15,7 @@ import { toast } from 'sonner'
 const Categories = () => {
     const [searchParams] = useSearchParams()
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-    const [categoryToEdit, setCategoryToEdit] = useState<CreateCategory | null>(null)
+    const [categoryToEdit, setCategoryToEdit] = useState<(CreateCategory & { category_id: number }) | null>(null)
 
     const { data, isLoading, isError } = useCategories({
         page: parseInt(searchParams.get('page') || '1'),

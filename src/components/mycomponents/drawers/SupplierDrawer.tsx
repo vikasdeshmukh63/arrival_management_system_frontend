@@ -2,9 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import { useSizes } from '@/hooks/useSizes'
 import { useSupplier } from '@/hooks/useSupplier'
-import { CreateSize } from '@/lib/size'
 import { CreateSupplier } from '@/lib/supplier'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
@@ -39,7 +37,6 @@ const SupplierDrawer = ({
         register,
         handleSubmit,
         formState: { errors },
-        control,
         reset
     } = useForm<BrandFormData>({
         resolver: zodResolver(brandSchema)

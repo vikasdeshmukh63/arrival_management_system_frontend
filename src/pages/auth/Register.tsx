@@ -1,15 +1,15 @@
+import Logo from '@/components/mycomponents/Logo'
 import { ModeToggle } from '@/components/mycomponents/mode-toggle'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
-import Logo from '@/components/mycomponents/Logo'
+import { z } from 'zod'
 
 const registerSchema = z
     .object({

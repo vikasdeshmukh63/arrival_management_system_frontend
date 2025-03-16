@@ -1,21 +1,5 @@
-import {
-    Building2,
-    HandHeart,
-    Home,
-    Layers2,
-    LayoutDashboard,
-    LogOut,
-    Package,
-    Palette,
-    SquareRoundCorner,
-    SquareSigma,
-    Target,
-    Truck
-} from 'lucide-react'
-import React from 'react'
+import { Building2, HandHeart, Layers2, LayoutDashboard, LogOut, Package, Palette, SquareRoundCorner, SquareSigma, Target, Truck } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import Logo from './Logo'
-import { ModeToggle } from './mode-toggle'
 
 const menuItems = [
     {

@@ -182,7 +182,7 @@ const ArrivalForm = ({
                         type="number"
                         placeholder="Expected Kilograms"
                         id="expected_kilograms"
-                        defaultValue={data?.expected_kilograms}
+                        defaultValue={Number(data?.expected_kilograms)}
                         {...register('expected_kilograms')}
                     />
                     {errors.expected_kilograms && <span className="text-xs text-red-500">{errors.expected_kilograms.message}</span>}

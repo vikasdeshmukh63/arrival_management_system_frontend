@@ -1,8 +1,8 @@
-import React from 'react'
-import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
-import { Button } from '../ui/button'
 import { DetailedArrivalProduct } from '@/lib/arrivalProducts'
+import React from 'react'
 import { Badge } from '../ui/badge'
+import { Button } from '../ui/button'
+import { Card, CardFooter, CardHeader } from '../ui/card'
 
 const ProcessProductCard = ({
     product,

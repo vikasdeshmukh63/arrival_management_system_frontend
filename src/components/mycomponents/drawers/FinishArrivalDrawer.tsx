@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { EArrivalStatus } from '@/constants/constants'
 import { FinishProcessingResponse } from '@/lib/arrivalProducts'
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const formatStatus = (status: string) => {
@@ -14,7 +13,6 @@ const formatStatus = (status: string) => {
     if (status === EArrivalStatus.FINISHED) return <span className="text-blue-500 font-bold">{modifiedStatus}</span>
     return modifiedStatus
 }
-
 
 const FinishArrivalDrawer = ({ data, open, onClose }: { data: FinishProcessingResponse; open: boolean; onClose: () => void }) => {
     const navigate = useNavigate()

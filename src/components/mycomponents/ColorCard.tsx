@@ -1,9 +1,8 @@
-import { Brand } from '@/lib/brand'
+import { Color } from '@/lib/color'
 import { useState } from 'react'
 import { Button } from '../ui/button'
 import { Card, CardFooter, CardHeader } from '../ui/card'
 import DeleteModal from './DeleteModal'
-import { Color } from '@/lib/color'
 
 const ColorCard = ({ color, handleOpenEditDrawer }: { color: Color; handleOpenEditDrawer: (color: Color) => void }) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false)

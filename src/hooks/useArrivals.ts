@@ -9,8 +9,8 @@ export const useArrivals = (params?: ArrivalQueryParams) => {
     const { data, isLoading, isError } = useQuery({
         queryKey: ['arrivals', params],
         queryFn: () => arrivalApi.getArrivals(params),
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 10
+        staleTime: 0,
+        gcTime: 0
     })
 
     const createArrivalMutation = useMutation({
@@ -102,7 +102,7 @@ export const useArrival = (arrival_number: string) => {
         gcTime: 1000 * 60 * 10,
         enabled: !!arrival_number // Only run the query if we have an arrival_id
     })
-    
+
     return {
         arrival: data,
         isLoading,
