@@ -3,7 +3,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 export const useStyles = (params?: StyleQueryParams) => {
+    // query client
     const queryClient = useQueryClient()
+
+    // query
     const { data, isLoading, isError } = useQuery({
         queryKey: ['styles', params],
         queryFn: () => styleApi.getStyles(params),
@@ -11,6 +14,7 @@ export const useStyles = (params?: StyleQueryParams) => {
         gcTime: 1000 * 60 * 10
     })
 
+    // create style
     const createStyleMutation = useMutation({
         mutationFn: (style: CreateStyle) => styleApi.createStyle(style),
         onSuccess: async () => {
@@ -22,6 +26,7 @@ export const useStyles = (params?: StyleQueryParams) => {
         }
     })
 
+    // update style
     const updateStyleMutation = useMutation({
         mutationFn: ({ style_id, style }: { style_id: number; style: CreateStyle }) => styleApi.updateStyle(style_id, style),
         onSuccess: async () => {
@@ -33,6 +38,7 @@ export const useStyles = (params?: StyleQueryParams) => {
         }
     })
 
+    // delete style
     const deleteStyleMutation = useMutation({
         mutationFn: (style_id: number) => styleApi.deleteStyle(style_id),
         onSuccess: async () => {

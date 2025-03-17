@@ -1,6 +1,7 @@
 import axiosInstance from './axios-instance'
 import { Pagination } from './products'
 
+// types
 export interface ColorQueryParams {
     order?: string
     search?: string
@@ -24,6 +25,7 @@ export interface CreateColor {
     name: string
 }
 
+// color api
 export const colorApi = {
     getColors: async (params?: ColorQueryParams): Promise<ColorResponse> => {
         const queryString = params

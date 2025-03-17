@@ -1,5 +1,6 @@
 import axiosInstance from './axios-instance'
 
+// types
 export interface LoginCredentials {
     email: string
     password: string
@@ -19,6 +20,7 @@ export interface AuthResponse {
     user: User
 }
 
+// auth api
 export const authApi = {
     login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
         const { data } = await axiosInstance.post<AuthResponse>('/api/auth/login', credentials)

@@ -1,6 +1,7 @@
 import axiosInstance from './axios-instance'
 import { Pagination } from './products'
 
+// types
 export interface CategoryQueryParams {
     order?: string
     search?: string
@@ -26,6 +27,7 @@ export interface CreateCategory {
     description: string
 }
 
+// category api
 export const categoryApi = {
     getCategories: async (params?: CategoryQueryParams): Promise<CategoryResponse> => {
         const queryString = params

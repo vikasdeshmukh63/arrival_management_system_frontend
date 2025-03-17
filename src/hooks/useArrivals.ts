@@ -4,8 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 export const useArrivals = (params?: ArrivalQueryParams) => {
+    // navigate hook
     const navigate = useNavigate()
+
+    // query client
     const queryClient = useQueryClient()
+
+    // query
     const { data, isLoading, isError } = useQuery({
         queryKey: ['arrivals', params],
         queryFn: () => arrivalApi.getArrivals(params),
@@ -13,6 +18,7 @@ export const useArrivals = (params?: ArrivalQueryParams) => {
         gcTime: 0
     })
 
+    // create arrival
     const createArrivalMutation = useMutation({
         mutationFn: (arrival: CreateArrival) => arrivalApi.createArrival(arrival),
         onSuccess: async () => {
@@ -24,6 +30,7 @@ export const useArrivals = (params?: ArrivalQueryParams) => {
         }
     })
 
+    // update arrival
     const updateArrivalMutation = useMutation({
         mutationFn: ({ arrival_number, arrival }: { arrival_number: string; arrival: CreateArrival }) =>
             arrivalApi.updateArrival(arrival_number, arrival),
@@ -36,6 +43,7 @@ export const useArrivals = (params?: ArrivalQueryParams) => {
         }
     })
 
+    // delete arrival
     const deleteArrivalMutation = useMutation({
         mutationFn: (arrival_id: number) => arrivalApi.deleteArrival(arrival_id),
         onSuccess: async () => {
@@ -47,6 +55,7 @@ export const useArrivals = (params?: ArrivalQueryParams) => {
         }
     })
 
+    // add products to arrival
     const addProductsToArrivalMutation = useMutation({
         mutationFn: ({ arrival_number, arrival_products }: { arrival_number: string; arrival_products: ArrivalProduct[] }) =>
             arrivalApi.addProductsToArrival(arrival_number, arrival_products),
@@ -59,6 +68,7 @@ export const useArrivals = (params?: ArrivalQueryParams) => {
         }
     })
 
+    // start processing
     const startProcessingMutation = useMutation({
         mutationFn: ({ arrival_number, arrival_data }: { arrival_number: string; arrival_data: StartProcessing }) =>
             arrivalApi.startProcessing(arrival_number, arrival_data),

@@ -18,9 +18,11 @@ const colorSchema = z.object({
 type ColorFormData = z.infer<typeof colorSchema>
 
 const ColorDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () => void; data?: (CreateColor & { color_id: number }) | null }) => {
+    // state
     const submitRef = useRef<HTMLButtonElement>(null)
     const isSubmittingRef = useRef(false)
 
+    // form
     const {
         register,
         handleSubmit,
@@ -30,8 +32,10 @@ const ColorDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =
         resolver: zodResolver(colorSchema)
     })
 
+    // hooks
     const { createColor, isCreatingColor, createColorError, updateColor, isUpdatingColor, updateColorError } = useColors()
 
+    // reset form and close drawer
     useEffect(() => {
         if (isSubmittingRef.current && !isCreatingColor && !updateColorError) {
             if (!createColorError) {
@@ -42,6 +46,7 @@ const ColorDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =
         }
     }, [isCreatingColor, createColorError, onClose, reset, updateColorError])
 
+    // on submit
     const onSubmit = async (formData: ColorFormData) => {
         try {
             isSubmittingRef.current = true
@@ -61,13 +66,16 @@ const ColorDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =
             open={isOpen}
             onOpenChange={onClose}>
             <SheetContent className="px-4">
+                {/* sheet header */}
                 <SheetHeader>
                     <SheetTitle>{data ? 'Update' : 'Add'} Color</SheetTitle>
                 </SheetHeader>
+                {/* sheet content */}
                 <div className="w-full">
                     <form
                         className="w-full border p-4 rounded-md flex flex-col gap-4"
                         onSubmit={handleSubmit(onSubmit)}>
+                        {/* name */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="name">Name</Label>
                             <Input
@@ -79,7 +87,7 @@ const ColorDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =
                             />
                             {errors.name && <span className="text-xs text-red-500">{errors.name.message}</span>}
                         </div>
-
+                        {/* submit button */}
                         <button
                             type="submit"
                             className="hidden"
@@ -87,9 +95,11 @@ const ColorDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =
                         />
                     </form>
                 </div>
+                {/* error */}
                 {updateColorError && updateColorError instanceof AxiosError && (
                     <span className="text-xs text-red-500">{updateColorError.response?.data.message}</span>
                 )}
+                {/* sheet footer */}
                 <SheetFooter>
                     <Button onClick={() => submitRef.current?.click()}>
                         {isCreatingColor || isUpdatingColor ? <Loader className="animate-spin" /> : `${data ? 'Update' : 'Create'} Color`}

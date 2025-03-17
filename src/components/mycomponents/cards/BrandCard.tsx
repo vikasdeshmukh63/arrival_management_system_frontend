@@ -5,18 +5,23 @@ import { useState } from 'react'
 import DeleteModal from '../DeleteModal'
 
 const BrandCard = ({ brand, handleOpenEditDrawer }: { brand: Brand; handleOpenEditDrawer: (brand: Brand) => void }) => {
+    // state
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
 
     return (
         <Card className="relative">
+            {/* card header */}
             <CardHeader>{brand.name}</CardHeader>
 
+            {/* card footer */}
             <CardFooter className="flex justify-between items-center">
+                {/* edit */}
                 <Button
                     variant="outline"
                     onClick={() => handleOpenEditDrawer(brand)}>
                     Edit
                 </Button>
+                {/* delete */}
                 <Button
                     variant="destructive"
                     onClick={() => setOpenDeleteModal(true)}>
@@ -24,7 +29,7 @@ const BrandCard = ({ brand, handleOpenEditDrawer }: { brand: Brand; handleOpenEd
                 </Button>
             </CardFooter>
 
-            {/* Delete Modal */}
+            {/* delete modal */}
             {openDeleteModal && (
                 <DeleteModal
                     open={openDeleteModal}

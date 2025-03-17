@@ -11,27 +11,33 @@ import { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-const brandSchema = z.object({
+// size schema
+const sizeSchema = z.object({
     name: z.string().min(1, 'Name is required')
 })
 
-type BrandFormData = z.infer<typeof brandSchema>
+// size form data
+type SizeFormData = z.infer<typeof sizeSchema>
 
 const SizeDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () => void; data?: (CreateSize & { size_id: number }) | null }) => {
+    // state
     const submitRef = useRef<HTMLButtonElement>(null)
     const isSubmittingRef = useRef(false)
 
+    // form
     const {
         register,
         handleSubmit,
         formState: { errors },
         reset
-    } = useForm<BrandFormData>({
-        resolver: zodResolver(brandSchema)
+    } = useForm<SizeFormData>({
+        resolver: zodResolver(sizeSchema)
     })
 
+    // hooks
     const { createSize, isCreatingSize, createSizeError, updateSize, isUpdatingSize, updateSizeError } = useSizes()
 
+    // reset form and close drawer
     useEffect(() => {
         if (isSubmittingRef.current && !isCreatingSize && !updateSizeError) {
             if (!createSizeError) {
@@ -42,7 +48,8 @@ const SizeDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =>
         }
     }, [isCreatingSize, createSizeError, onClose, reset, updateSizeError])
 
-    const onSubmit = async (formData: BrandFormData) => {
+    // on submit
+    const onSubmit = async (formData: SizeFormData) => {
         try {
             isSubmittingRef.current = true
             if (!data) {
@@ -61,13 +68,16 @@ const SizeDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =>
             open={isOpen}
             onOpenChange={onClose}>
             <SheetContent className="px-4">
+                {/* sheet header */}
                 <SheetHeader>
                     <SheetTitle>{data ? 'Update' : 'Add'} Size</SheetTitle>
                 </SheetHeader>
+                {/* sheet content */}
                 <div className="w-full">
                     <form
                         className="w-full border p-4 rounded-md flex flex-col gap-4"
                         onSubmit={handleSubmit(onSubmit)}>
+                        {/* name */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="name">Name</Label>
                             <Input
@@ -79,7 +89,7 @@ const SizeDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =>
                             />
                             {errors.name && <span className="text-xs text-red-500">{errors.name.message}</span>}
                         </div>
-
+                        {/* submit button */}
                         <button
                             type="submit"
                             className="hidden"
@@ -87,9 +97,11 @@ const SizeDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =>
                         />
                     </form>
                 </div>
+                {/* error */}
                 {updateSizeError && updateSizeError instanceof AxiosError && (
                     <span className="text-xs text-red-500">{updateSizeError.response?.data.message}</span>
                 )}
+                {/* sheet footer */}
                 <SheetFooter>
                     <Button onClick={() => submitRef.current?.click()}>
                         {isCreatingSize || isUpdatingSize ? <Loader className="animate-spin" /> : `${data ? 'Update' : 'Create'} Size`}

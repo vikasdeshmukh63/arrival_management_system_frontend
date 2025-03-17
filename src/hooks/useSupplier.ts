@@ -3,7 +3,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 export const useSupplier = (params?: SupplierQueryParams) => {
+    // query client
     const queryClient = useQueryClient()
+
+    // query
     const { data, isLoading, isError } = useQuery({
         queryKey: ['suppliers', params],
         queryFn: () => supplierApi.getSuppliers(params),
@@ -11,6 +14,7 @@ export const useSupplier = (params?: SupplierQueryParams) => {
         gcTime: 1000 * 60 * 10
     })
 
+    // create supplier
     const createSupplierMutation = useMutation({
         mutationFn: (supplier: CreateSupplier) => supplierApi.createSupplier(supplier),
         onSuccess: async () => {
@@ -22,6 +26,7 @@ export const useSupplier = (params?: SupplierQueryParams) => {
         }
     })
 
+    // update supplier
     const updateSupplierMutation = useMutation({
         mutationFn: ({ supplier_id, supplier }: { supplier_id: number; supplier: CreateSupplier }) =>
             supplierApi.updateSupplier(supplier_id, supplier),
@@ -34,6 +39,7 @@ export const useSupplier = (params?: SupplierQueryParams) => {
         }
     })
 
+    // delete supplier
     const deleteSupplierMutation = useMutation({
         mutationFn: (supplier_id: number) => supplierApi.deleteSupplier(supplier_id),
         onSuccess: async () => {

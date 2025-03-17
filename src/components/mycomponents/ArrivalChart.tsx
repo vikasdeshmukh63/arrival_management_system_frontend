@@ -1,7 +1,8 @@
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+
+// chart data
 const chartData = [
     { month: 'January', upcoming: 10, inProgress: 8, finished: 7, withDiscrepancy: 6 },
     { month: 'February', upcoming: 2, inProgress: 0, finished: 8, withDiscrepancy: 2 },
@@ -17,6 +18,7 @@ const chartData = [
     { month: 'December', upcoming: 2, inProgress: 2, finished: 5, withDiscrepancy: 6 }
 ]
 
+// chart config
 const chartConfig = {
     upcoming: {
         label: 'Upcoming',
@@ -39,10 +41,12 @@ const chartConfig = {
 export function ArrivalChart({ title, description }: { title: string; description: string }) {
     return (
         <Card className="w-full h-full">
+            {/* card header */}
             <CardHeader>
                 <CardTitle>{title}</CardTitle>
                 <CardDescription>{description}</CardDescription>
             </CardHeader>
+            {/* card content */}
             <CardContent>
                 <ChartContainer
                     config={chartConfig}

@@ -11,16 +11,20 @@ import { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+// brand schema
 const brandSchema = z.object({
     name: z.string().min(1, 'Name is required')
 })
 
+// brand form data
 type BrandFormData = z.infer<typeof brandSchema>
 
 const BrandDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () => void; data?: (CreateBrand & { brand_id: number }) | null }) => {
+    // state
     const submitRef = useRef<HTMLButtonElement>(null)
     const isSubmittingRef = useRef(false)
 
+    // form
     const {
         register,
         handleSubmit,
@@ -30,8 +34,10 @@ const BrandDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =
         resolver: zodResolver(brandSchema)
     })
 
+    // hooks
     const { createBrand, isCreatingBrand, createBrandError, updateBrand, isUpdatingBrand, updateBrandError } = useBrands()
 
+    // reset form and close drawer
     useEffect(() => {
         if (isSubmittingRef.current && !isCreatingBrand && !updateBrandError) {
             if (!createBrandError) {
@@ -42,6 +48,7 @@ const BrandDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =
         }
     }, [isCreatingBrand, createBrandError, onClose, reset, updateBrandError])
 
+    // on submit
     const onSubmit = async (formData: BrandFormData) => {
         try {
             isSubmittingRef.current = true
@@ -61,13 +68,16 @@ const BrandDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =
             open={isOpen}
             onOpenChange={onClose}>
             <SheetContent className="px-4">
+                {/* sheet header */}
                 <SheetHeader>
                     <SheetTitle>{data ? 'Update' : 'Add'} Product</SheetTitle>
                 </SheetHeader>
+                {/* sheet content */}
                 <div className="w-full">
                     <form
                         className="w-full border p-4 rounded-md flex flex-col gap-4"
                         onSubmit={handleSubmit(onSubmit)}>
+                        {/* name */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="name">Name</Label>
                             <Input
@@ -80,6 +90,7 @@ const BrandDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =
                             {errors.name && <span className="text-xs text-red-500">{errors.name.message}</span>}
                         </div>
 
+                        {/* submit button */}
                         <button
                             type="submit"
                             className="hidden"
@@ -87,9 +98,11 @@ const BrandDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () =
                         />
                     </form>
                 </div>
+                {/* error */}
                 {updateBrandError && updateBrandError instanceof AxiosError && (
                     <span className="text-xs text-red-500">{updateBrandError.response?.data.message}</span>
                 )}
+                {/* sheet footer */}
                 <SheetFooter>
                     <Button onClick={() => submitRef.current?.click()}>
                         {isCreatingBrand || isUpdatingBrand ? <Loader className="animate-spin" /> : `${data ? 'Update' : 'Create'} Product`}

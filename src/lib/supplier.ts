@@ -1,6 +1,7 @@
 import axiosInstance from './axios-instance'
 import { Pagination } from './products'
 
+// types
 export interface SupplierQueryParams {
     order?: string
     search?: string
@@ -32,6 +33,7 @@ export interface CreateSupplier {
     address: string
 }
 
+// supplier api
 export const supplierApi = {
     getSuppliers: async (params?: SupplierQueryParams): Promise<SupplierResponse> => {
         const queryString = params

@@ -12,6 +12,7 @@ import LoaderComponent from './Loader'
 import NoData from './NoData'
 import { CreateArrival } from '@/lib/arrivals'
 
+// product form props
 interface ProductFormProps {
     arrivalId?: string
     data?:
@@ -29,6 +30,7 @@ interface ProductFormProps {
         | null
 }
 
+// selected product
 interface SelectedProduct {
     product_id: number
     condition_id: number
@@ -37,15 +39,14 @@ interface SelectedProduct {
 }
 
 const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
+    // state
     const [search, setSearch] = useState('')
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedProducts, setSelectedProducts] = useState<Record<number, SelectedProduct>>({})
 
-    // Initialize form with existing data
+    // initialize form with existing data
     useEffect(() => {
-        console.log('useEffect triggered with:', { data, arrivalId })
         if (data?.arrival_products) {
-            console.log('Products found:', data.Products)
             const initialProducts: Record<number, SelectedProduct> = {}
             data.arrival_products.forEach((product) => {
                 initialProducts[product.product_id] = {
@@ -55,21 +56,23 @@ const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
                     isSelected: true
                 }
             })
-            console.log('Setting selected products:', initialProducts)
             setSelectedProducts(initialProducts)
         }
     }, [data?.arrival_products, arrivalId])
 
+    // hooks
     const { data: products, isLoading: isProductsLoading } = useProducts({
         search: searchQuery || undefined
     })
     const { data: conditions, isLoading: isConditionsLoading } = useConditions()
     const { addProductsToArrival, isAddingProducts, addProductsToArrivalError } = useArrivals()
 
+    // handle search
     const handleSearch = () => {
         setSearchQuery(search)
     }
 
+    // search products
     const searchProducts = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             const target = e.target as HTMLInputElement
@@ -77,21 +80,23 @@ const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
         }
     }
 
+    // clear search
     const clearSearch = () => {
         setSearch('')
         setSearchQuery('')
     }
 
+    // handle product select
     const handleProductSelect = (productId: number, isChecked: boolean) => {
         setSelectedProducts((prev) => {
             if (!isChecked) {
-                // Remove the product when unchecked
+                // remove the product when unchecked
                 const newState = { ...prev }
                 delete newState[productId]
                 return newState
             }
 
-            // Add the product when checked
+            // add the product when checked
             return {
                 ...prev,
                 [productId]: {
@@ -104,6 +109,7 @@ const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
         })
     }
 
+    // handle quantity change
     const handleQuantityChange = (productId: number, quantity: string) => {
         setSelectedProducts((prev) => ({
             ...prev,
@@ -114,6 +120,7 @@ const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
         }))
     }
 
+    // handle condition change
     const handleConditionChange = (productId: number, conditionId: string) => {
         setSelectedProducts((prev) => ({
             ...prev,
@@ -124,6 +131,7 @@ const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
         }))
     }
 
+    // handle submit
     const handleSubmit = () => {
         const selectedData = Object.values(selectedProducts).map(({ product_id, condition_id, expected_quantity }) => ({
             product_id,
@@ -139,7 +147,10 @@ const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
 
     return (
         <div className="w-full">
+            {/* title */}
             <h2 className="my-4">Add Products for Arrival: {arrivalId}</h2>
+
+            {/* search */}
             <div className="flex gap-2 mb-4">
                 <Input
                     name="search"
@@ -152,15 +163,19 @@ const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
             </div>
 
             {isProductsLoading || isConditionsLoading ? (
+                // loader
                 <LoaderComponent />
             ) : products && products.items && products.items.length > 0 ? (
+                // products
                 <>
                     <div className="grid grid-cols-1 gap-4 h-[500px] overflow-y-auto">
                         {products.items.map((product: Product) => (
                             <div
                                 key={product.product_id}
                                 className="border p-4 rounded-md">
+                                {/* product */}
                                 <div className="flex items-center gap-4 flex-col">
+                                    {/* product name */}
                                     <div className="flex items-center gap-2">
                                         <Checkbox
                                             checked={!!selectedProducts[product.product_id]}
@@ -168,6 +183,7 @@ const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
                                         />
                                         <h3 className="flex-1">{product.name}</h3>
                                     </div>
+                                    {/* quantity */}
                                     <div className="flex gap-4">
                                         <div className="w-full">
                                             <Input
@@ -183,6 +199,7 @@ const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
                                                     <span className="text-xs text-red-500">Quantity is required</span>
                                                 )}
                                         </div>
+                                        {/* condition */}
                                         <div className="w-full">
                                             <Select
                                                 value={selectedProducts[product.product_id]?.condition_id?.toString()}
@@ -211,8 +228,11 @@ const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
                             </div>
                         ))}
                     </div>
+                    {/* error */}
                     {addProductsToArrivalError && <p className="text-red-500">{addProductsToArrivalError.message}</p>}
+                    {/* no products selected */}
                     {Object.values(selectedProducts).length === 0 && <span className="text-red-500">you must select at least one product</span>}
+                    {/* submit */}
                     <div className="mt-4 w-full">
                         <Button
                             onClick={handleSubmit}
@@ -223,6 +243,7 @@ const ProductForm = ({ arrivalId, data }: ProductFormProps) => {
                     </div>
                 </>
             ) : (
+                // no products
                 <NoData item="products" />
             )}
         </div>

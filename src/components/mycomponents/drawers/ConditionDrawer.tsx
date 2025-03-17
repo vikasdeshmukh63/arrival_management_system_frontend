@@ -12,11 +12,13 @@ import { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+// condition schema
 const conditionSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     description: z.string().min(1, 'Description is required')
 })
 
+// condition form data
 type ConditionFormData = z.infer<typeof conditionSchema>
 
 const ConditionDrawer = ({
@@ -28,9 +30,11 @@ const ConditionDrawer = ({
     onClose: () => void
     data?: (CreateCondition & { condition_id: number }) | null
 }) => {
+    // state
     const submitRef = useRef<HTMLButtonElement>(null)
     const isSubmittingRef = useRef(false)
 
+    // form
     const {
         register,
         handleSubmit,
@@ -40,8 +44,10 @@ const ConditionDrawer = ({
         resolver: zodResolver(conditionSchema)
     })
 
+    // hooks
     const { createCondition, isCreatingCondition, createConditionError, updateCondition, isUpdatingCondition, updateConditionError } = useConditions()
 
+    // reset form and close drawer
     useEffect(() => {
         if (isSubmittingRef.current && !isCreatingCondition && !updateConditionError) {
             if (!createConditionError) {
@@ -52,6 +58,7 @@ const ConditionDrawer = ({
         }
     }, [isCreatingCondition, createConditionError, onClose, reset, updateConditionError])
 
+    // on submit
     const onSubmit = async (formData: ConditionFormData) => {
         try {
             isSubmittingRef.current = true
@@ -71,13 +78,16 @@ const ConditionDrawer = ({
             open={isOpen}
             onOpenChange={onClose}>
             <SheetContent className="px-4">
+                {/* sheet header */}
                 <SheetHeader>
                     <SheetTitle>{data ? 'Update' : 'Add'} Condition</SheetTitle>
                 </SheetHeader>
+                {/* sheet content */}
                 <div className="w-full">
                     <form
                         className="w-full border p-4 rounded-md flex flex-col gap-4"
                         onSubmit={handleSubmit(onSubmit)}>
+                        {/* name */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="name">Name</Label>
                             <Input
@@ -89,6 +99,7 @@ const ConditionDrawer = ({
                             />
                             {errors.name && <span className="text-xs text-red-500">{errors.name.message}</span>}
                         </div>
+                        {/* description */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="description">Description</Label>
                             <Textarea
@@ -99,7 +110,7 @@ const ConditionDrawer = ({
                             />
                             {errors.description && <span className="text-xs text-red-500">{errors.description.message}</span>}
                         </div>
-
+                        {/* submit button */}
                         <button
                             type="submit"
                             className="hidden"
@@ -107,9 +118,11 @@ const ConditionDrawer = ({
                         />
                     </form>
                 </div>
+                {/* error */}
                 {updateConditionError && updateConditionError instanceof AxiosError && (
                     <span className="text-xs text-red-500">{updateConditionError.response?.data.message}</span>
                 )}
+                {/* sheet footer */}
                 <SheetFooter>
                     <Button onClick={() => submitRef.current?.click()}>
                         {isCreatingCondition || isUpdatingCondition ? <Loader className="animate-spin" /> : `${data ? 'Update' : 'Create'} Condition`}

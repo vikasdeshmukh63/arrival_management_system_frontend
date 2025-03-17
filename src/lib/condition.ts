@@ -1,6 +1,7 @@
 import axiosInstance from './axios-instance'
 import { Pagination } from './products'
 
+// types
 export interface ConditionQueryParams {
     order?: string
     search?: string
@@ -26,6 +27,7 @@ export interface CreateCondition {
     description: string
 }
 
+// condition api
 const conditionApi = {
     getConditions: async (params?: ConditionQueryParams): Promise<ConditionResponse> => {
         const queryString = params

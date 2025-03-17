@@ -6,14 +6,15 @@ interface PublicRouteProps {
 }
 
 export const PublicRoute = ({ children }: PublicRouteProps) => {
+    // hooks
     const { isAuthenticated, isLoadingUser } = useAuth()
 
-    // During initial load, render children to prevent flash of loading
+    // during initial load, render children to prevent flash of loading
     if (isLoadingUser) {
         return null
     }
 
-    // If user is authenticated then redirect to dashboard
+    // if user is authenticated then redirect to dashboard
     if (isAuthenticated) {
         return (
             <Navigate
@@ -23,6 +24,6 @@ export const PublicRoute = ({ children }: PublicRouteProps) => {
         )
     }
 
-    // If user is not authenticated or on home page, show the requested route
+    // if user is not authenticated or on home page, show the requested route
     return <>{children}</>
 }

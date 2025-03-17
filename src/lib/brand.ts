@@ -1,6 +1,7 @@
 import axiosInstance from './axios-instance'
 import { Pagination } from './products'
 
+// types
 export interface BrandQueryParams {
     order?: string
     search?: string
@@ -25,6 +26,7 @@ export interface CreateBrand {
     name: string
 }
 
+// brand api
 export const brandApi = {
     getBrands: async (params?: BrandQueryParams): Promise<BrandResponse> => {
         const queryString = params

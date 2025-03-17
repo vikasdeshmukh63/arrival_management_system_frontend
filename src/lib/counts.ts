@@ -1,5 +1,6 @@
 import axiosInstance from './axios-instance'
 
+// types
 interface ArrivalCounts {
     total: number
     upcoming: number
@@ -19,6 +20,7 @@ interface EntitiesCount {
     suppliers: number
 }
 
+// count api
 export const countApi = {
     getArrivalCounts: async (): Promise<ArrivalCounts> => {
         const { data } = await axiosInstance.get<{ data: ArrivalCounts }>('/api/statistics/arrivals')

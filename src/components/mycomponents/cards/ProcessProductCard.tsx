@@ -23,13 +23,17 @@ const ProcessProductCard = ({
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}>
             <Card className="relative h-fit">
+                {/* card header */}
                 <CardHeader className="mt-4">{product.Product.name}</CardHeader>
+                {/* card badge */}
                 <Badge
                     variant="default"
                     className="absolute top-2 right-2 font-bold">
                     {product.Product.tsku}
                 </Badge>
+                {/* card footer */}
                 <CardFooter className="flex justify-between items-center">
+                    {/* quantity available */}
                     <Button
                         className="w-full"
                         variant={right ? 'destructive' : 'outline'}>

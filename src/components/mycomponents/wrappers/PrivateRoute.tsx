@@ -6,17 +6,18 @@ interface PrivateRouteProps {
 }
 
 export const PrivateRoute = ({ children }: PrivateRouteProps) => {
+    // hooks
     const { isAuthenticated, isLoadingUser } = useAuth()
     const location = useLocation()
 
-    // While checking authentication status, show nothing
+    // while checking authentication status, show nothing
     if (isLoadingUser) {
         return null
     }
 
-    // If user is not authenticated, redirect to login page
+    // if user is not authenticated, redirect to login page
     if (!isAuthenticated) {
-        // Save the attempted URL for redirecting after login
+        // save the attempted URL for redirecting after login
         return (
             <Navigate
                 to="/login"
@@ -26,6 +27,6 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
         )
     }
 
-    // If user is authenticated, show the requested route
+    // if user is authenticated, show the requested route
     return <>{children}</>
 }

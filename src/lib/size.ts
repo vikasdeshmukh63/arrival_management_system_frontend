@@ -1,6 +1,7 @@
 import axiosInstance from './axios-instance'
 import { Pagination } from './products'
 
+// types
 export interface SizeQueryParams {
     order?: string
     search?: string
@@ -24,6 +25,7 @@ export interface CreateSize {
     name: string
 }
 
+// size api
 export const sizeApi = {
     getSizes: async (params?: SizeQueryParams): Promise<SizeResponse> => {
         const queryString = params

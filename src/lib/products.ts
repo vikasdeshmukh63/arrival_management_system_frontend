@@ -1,5 +1,6 @@
 import axiosInstance from './axios-instance'
 
+// types
 export interface ProductCat {
     category_id: number
     name: string
@@ -74,6 +75,7 @@ export interface CreateProduct {
     style_id: number
 }
 
+// product api
 export const productApi = {
     getProducts: async (params?: ProductQueryParams): Promise<ProductResponse> => {
         const queryString = params

@@ -13,8 +13,10 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export function CustomPagination({ pagination }: { pagination: PaginationType }) {
+    // navigate hook
     const navigate = useNavigate()
 
+    // pagination
     const { currentPage, totalPages, hasNextPage, hasPreviousPage } = pagination
 
     // changing page
@@ -25,6 +27,7 @@ export function CustomPagination({ pagination }: { pagination: PaginationType })
         navigate(`${window.location.pathname}?${params.toString()}`)
     }
 
+    // update url
     useEffect(() => {
         const params = new URLSearchParams(window.location.search)
         params.set('page', currentPage.toString())
@@ -35,6 +38,7 @@ export function CustomPagination({ pagination }: { pagination: PaginationType })
     return (
         <Pagination>
             <PaginationContent>
+                {/* previous page */}
                 <PaginationItem>
                     <PaginationPrevious
                         onClick={() => handleChangePage(currentPage - 1)}
@@ -42,10 +46,11 @@ export function CustomPagination({ pagination }: { pagination: PaginationType })
                     />
                 </PaginationItem>
 
+                {/* pages */}
                 {Array.from({ length: totalPages }, (_, index) => {
                     const pageNumber = index + 1
 
-                    // Show ellipsis for large page numbers
+                    // show ellipsis for large page numbers
                     if (totalPages > 7) {
                         if (pageNumber === 1 || pageNumber === totalPages || (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)) {
                             return (
@@ -71,7 +76,7 @@ export function CustomPagination({ pagination }: { pagination: PaginationType })
                         return null
                     }
 
-                    // Show all pages if total pages are 7 or less
+                    // show all pages if total pages are 7 or less
                     return (
                         <PaginationItem key={pageNumber}>
                             <PaginationLink
@@ -87,6 +92,7 @@ export function CustomPagination({ pagination }: { pagination: PaginationType })
                     )
                 })}
 
+                {/* next page */}
                 <PaginationItem>
                     <PaginationNext
                         onClick={() => handleChangePage(currentPage + 1)}

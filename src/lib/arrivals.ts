@@ -1,6 +1,7 @@
 import axiosInstance from './axios-instance'
 import { Pagination, Product } from './products'
 
+// types
 export interface ArrivalQueryParams {
     order?: string
     search?: string
@@ -73,6 +74,7 @@ export interface StartProcessing {
     received_kilograms?: number
 }
 
+// arrival api
 export const arrivalApi = {
     getArrivals: async (params?: ArrivalQueryParams): Promise<ArrivalResponse> => {
         const queryString = params

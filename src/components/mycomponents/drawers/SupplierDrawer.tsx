@@ -11,7 +11,8 @@ import { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-const brandSchema = z.object({
+// supplier schema
+const supplierSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     contact_person: z.string().min(1, 'Contact Person is required'),
     phone: z.string().min(1, 'Phone is required'),
@@ -19,7 +20,8 @@ const brandSchema = z.object({
     address: z.string().min(1, 'Address is required')
 })
 
-type BrandFormData = z.infer<typeof brandSchema>
+// supplier form data
+type SupplierFormData = z.infer<typeof supplierSchema>
 
 const SupplierDrawer = ({
     isOpen,
@@ -30,20 +32,24 @@ const SupplierDrawer = ({
     onClose: () => void
     data?: (CreateSupplier & { supplier_id: number }) | null
 }) => {
+    // state
     const submitRef = useRef<HTMLButtonElement>(null)
     const isSubmittingRef = useRef(false)
 
-    const {
+    // form
+            const {
         register,
         handleSubmit,
         formState: { errors },
         reset
-    } = useForm<BrandFormData>({
-        resolver: zodResolver(brandSchema)
+    } = useForm<SupplierFormData>({
+        resolver: zodResolver(supplierSchema)
     })
 
+    // hooks
     const { createSupplier, isCreatingSupplier, createSupplierError, updateSupplier, isUpdatingSupplier, updateSupplierError } = useSupplier()
 
+    // reset form and close drawer
     useEffect(() => {
         if (isSubmittingRef.current && !isCreatingSupplier && !updateSupplierError) {
             if (!createSupplierError) {
@@ -54,7 +60,8 @@ const SupplierDrawer = ({
         }
     }, [isCreatingSupplier, createSupplierError, onClose, reset, updateSupplierError])
 
-    const onSubmit = async (formData: BrandFormData) => {
+    // on submit
+    const onSubmit = async (formData: SupplierFormData) => {
         try {
             isSubmittingRef.current = true
             if (!data) {
@@ -73,13 +80,16 @@ const SupplierDrawer = ({
             open={isOpen}
             onOpenChange={onClose}>
             <SheetContent className="px-4">
+                {/* sheet header */}
                 <SheetHeader>
                     <SheetTitle>{data ? 'Update' : 'Add'} Supplier</SheetTitle>
                 </SheetHeader>
+                {/* sheet content */}
                 <div className="w-full">
                     <form
                         className="w-full border p-4 rounded-md flex flex-col gap-4"
                         onSubmit={handleSubmit(onSubmit)}>
+                        {/* name */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="name">Name</Label>
                             <Input
@@ -91,6 +101,7 @@ const SupplierDrawer = ({
                             />
                             {errors.name && <span className="text-xs text-red-500">{errors.name.message}</span>}
                         </div>
+                        {/* contact person */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="contact_person">Contact Person</Label>
                             <Input
@@ -102,6 +113,7 @@ const SupplierDrawer = ({
                             />
                             {errors.contact_person && <span className="text-xs text-red-500">{errors.contact_person.message}</span>}
                         </div>
+                        {/* phone */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="phone">Phone </Label>
                             <Input
@@ -113,6 +125,7 @@ const SupplierDrawer = ({
                             />
                             {errors.phone && <span className="text-xs text-red-500">{errors.phone.message}</span>}
                         </div>
+                        {/* email */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="email">Email</Label>
                             <Input
@@ -124,6 +137,7 @@ const SupplierDrawer = ({
                             />
                             {errors.email && <span className="text-xs text-red-500">{errors.email.message}</span>}
                         </div>
+                        {/* address */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="address">Address</Label>
                             <Input
@@ -135,6 +149,7 @@ const SupplierDrawer = ({
                             />
                             {errors.address && <span className="text-xs text-red-500">{errors.address.message}</span>}
                         </div>
+                        {/* submit button */}
                         <button
                             type="submit"
                             className="hidden"
@@ -142,9 +157,11 @@ const SupplierDrawer = ({
                         />
                     </form>
                 </div>
+                {/* error */}
                 {updateSupplierError && updateSupplierError instanceof AxiosError && (
                     <span className="text-xs text-red-500">{updateSupplierError.response?.data.message}</span>
                 )}
+                {/* sheet footer */}
                 <SheetFooter>
                     <Button onClick={() => submitRef.current?.click()}>
                         {isCreatingSupplier || isUpdatingSupplier ? <Loader className="animate-spin" /> : `${data ? 'Update' : 'Create'} Supplier`}

@@ -3,8 +3,10 @@ import { CreateProduct, productApi, ProductQueryParams } from '@/lib/products'
 import { toast } from 'sonner'
 
 export const useProducts = (params?: ProductQueryParams) => {
+    // query client
     const queryClient = useQueryClient()
 
+    // query
     const { data, isLoading, isError } = useQuery({
         queryKey: ['products', params],
         queryFn: () => productApi.getProducts(params),
@@ -12,6 +14,7 @@ export const useProducts = (params?: ProductQueryParams) => {
         gcTime: 1000 * 60 * 10
     })
 
+    // create product
     const createProductMutation = useMutation({
         mutationFn: (product: CreateProduct) => productApi.createProduct(product),
         onSuccess: async () => {
@@ -23,6 +26,7 @@ export const useProducts = (params?: ProductQueryParams) => {
         }
     })
 
+    // update product
     const updateProductMutation = useMutation({
         mutationFn: ({ tsku, product }: { tsku: string; product: CreateProduct }) => {
             return productApi.updateProduct(tsku, product)
@@ -36,6 +40,7 @@ export const useProducts = (params?: ProductQueryParams) => {
         }
     })
 
+    // delete product
     const deleteProductMutation = useMutation({
         mutationFn: (productId: string) => productApi.deleteProduct(productId),
         onSuccess: async () => {

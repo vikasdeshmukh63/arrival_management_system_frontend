@@ -2,7 +2,8 @@ import { categoryApi, CategoryQueryParams, CreateCategory } from '@/lib/category
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-export const useCategories = (params?: CategoryQueryParams) => {
+export const useCategories = (params?: CategoryQueryParams) => {    
+    // query client
     const queryClient = useQueryClient()
     const { data, isLoading, isError } = useQuery({
         queryKey: ['categories', params],
@@ -11,6 +12,7 @@ export const useCategories = (params?: CategoryQueryParams) => {
         gcTime: 1000 * 60 * 10
     })
 
+    // create category
     const createCategoryMutation = useMutation({
         mutationFn: (category: CreateCategory) => categoryApi.createCategory(category),
         onSuccess: async () => {
@@ -22,6 +24,7 @@ export const useCategories = (params?: CategoryQueryParams) => {
         }
     })
 
+    // update category
     const updateCategoryMutation = useMutation({
         mutationFn: ({ category_id, category }: { category_id: number; category: CreateCategory }) =>
             categoryApi.updateCategory(category_id, category),
@@ -34,6 +37,7 @@ export const useCategories = (params?: CategoryQueryParams) => {
         }
     })
 
+    // delete category
     const deleteCategoryMutation = useMutation({
         mutationFn: (category_id: number) => categoryApi.deleteCategory(category_id),
         onSuccess: async () => {

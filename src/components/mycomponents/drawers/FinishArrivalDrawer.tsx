@@ -4,6 +4,7 @@ import { EArrivalStatus } from '@/constants/constants'
 import { FinishProcessingResponse } from '@/lib/arrivalProducts'
 import { useNavigate } from 'react-router-dom'
 
+// format status
 const formatStatus = (status: string) => {
     const modifiedStatus = status.replace(/_/g, ' ')
     if (status === EArrivalStatus.NOT_INITIATED) return <span className="text-cyan-400 font-bold">{modifiedStatus}</span>
@@ -15,25 +16,33 @@ const formatStatus = (status: string) => {
 }
 
 const FinishArrivalDrawer = ({ data, open, onClose }: { data: FinishProcessingResponse; open: boolean; onClose: () => void }) => {
+    // navigate hook
     const navigate = useNavigate()
+
     return (
         <Sheet
             open={open}
             onOpenChange={onClose}>
             <SheetContent className="px-4">
+                {/* sheet header */}
                 <SheetHeader>
                     <SheetTitle>Finish Arrival</SheetTitle>
                 </SheetHeader>
+                {/* sheet content */}
                 <div className="flex flex-col gap-4">
+                    {/* arrival number */}
                     <p className="text-lg text-white">
                         <span className="font-bold">Arrival Number:</span> {data.arrival_number}
                     </p>
+                    {/* status */}
                     <p className="text-lg text-gray-500">
                         <span className="font-bold">Status:</span> {formatStatus(data.status)}
                     </p>
+                    {/* has discrepancies */}
                     <p className="text-lg text-gray-500">
                         <span className="font-bold">Has Discrepancies:</span> {data.has_discrepancies ? 'Yes' : 'No'}
                     </p>
+                    {/* discrepancies */}
                     {data.has_discrepancies && (
                         <p className="text-lg text-gray-500">
                             <span className="font-bold">Discrepancies:</span>
@@ -44,6 +53,7 @@ const FinishArrivalDrawer = ({ data, open, onClose }: { data: FinishProcessingRe
                         </p>
                     )}
                 </div>
+                {/* sheet footer */}
                 <SheetFooter>
                     <Button
                         variant="default"

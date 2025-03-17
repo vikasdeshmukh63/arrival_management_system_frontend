@@ -1,6 +1,7 @@
 import { Building2, HandHeart, Layers2, LayoutDashboard, LogOut, Package, Palette, SquareRoundCorner, SquareSigma, Target, Truck } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
+// menu items
 const menuItems = [
     {
         label: 'Dashboard',
@@ -62,6 +63,7 @@ const menuItems = [
 const Menu = () => {
     return (
         <div className="text-md">
+            {/* logo */}
             <Link to="/dashboard">
                 <img
                     src="./logo.svg"
@@ -70,6 +72,7 @@ const Menu = () => {
                 />
             </Link>
 
+            {/* menu items */}
             <div className="mt-4 flex flex-col gap-2">
                 {menuItems.map((item) => (
                     <Link

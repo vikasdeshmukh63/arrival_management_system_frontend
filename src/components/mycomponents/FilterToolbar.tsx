@@ -26,16 +26,21 @@ export function FilterToolbar({
     enableCategories?: boolean
     status?: boolean
 }) {
+    // hooks
     const { data: brands } = useBrands()
     const { data: colors } = useColors()
     const { data: sizes } = useSizes()
     const { data: styles } = useStyles()
     const { data: categories } = useCategories()
 
+    // search params
     const [searchParams, setSearchParams] = useSearchParams()
+
+    // state
     const [searchInput, setSearchInput] = useState(searchParams.get('search') || '')
     const [order, setOrder] = useState(searchParams.get('order') || 'asc')
 
+    // handle search
     const handleSearch = () => {
         if (searchInput.trim()) {
             setSearchParams((prev) => {
@@ -50,6 +55,7 @@ export function FilterToolbar({
         }
     }
 
+    // handle filter click
     const handleFilterClick = useCallback(
         (type: string, id: number | string) => {
             setSearchParams((prev) => {
@@ -60,6 +66,7 @@ export function FilterToolbar({
         [setSearchParams]
     )
 
+    // handle clear filters
     const handleClearFilters = () => {
         const page = searchParams.get('page')
         const itemsPerPage = searchParams.get('itemsPerPage')
@@ -72,6 +79,7 @@ export function FilterToolbar({
         setSearchInput('')
     }
 
+    // handle order
     useEffect(() => {
         if (order) {
             handleFilterClick('order', order)
@@ -80,6 +88,7 @@ export function FilterToolbar({
 
     return (
         <div className="flex items-center justify-between gap-2 flex-wrap md:flex-nowrap">
+            {/* search */}
             <div className="flex items-center gap-2 w-full md:w-auto">
                 <Input
                     placeholder="Search"
@@ -94,8 +103,10 @@ export function FilterToolbar({
                 <Button onClick={handleSearch}>Search</Button>
             </div>
 
+            {/* filter */}
             <div className="flex items-center gap-2 flex-wrap md:flex-nowrap">
                 <Menubar>
+                    {/* brands */}
                     {enableBrands && (
                         <MenubarMenu>
                             <MenubarTrigger>Brands</MenubarTrigger>
@@ -111,6 +122,7 @@ export function FilterToolbar({
                         </MenubarMenu>
                     )}
 
+                    {/* colors */}
                     {enableColors && (
                         <MenubarMenu>
                             <MenubarTrigger>Colors</MenubarTrigger>
@@ -126,6 +138,7 @@ export function FilterToolbar({
                         </MenubarMenu>
                     )}
 
+                    {/* sizes */}
                     {enableSizes && (
                         <MenubarMenu>
                             <MenubarTrigger>Sizes</MenubarTrigger>
@@ -141,6 +154,7 @@ export function FilterToolbar({
                         </MenubarMenu>
                     )}
 
+                    {/* styles */}
                     {enableStyles && (
                         <MenubarMenu>
                             <MenubarTrigger>Styles</MenubarTrigger>
@@ -156,6 +170,7 @@ export function FilterToolbar({
                         </MenubarMenu>
                     )}
 
+                    {/* categories */}
                     {enableCategories && (
                         <MenubarMenu>
                             <MenubarTrigger>Categories</MenubarTrigger>
@@ -171,6 +186,7 @@ export function FilterToolbar({
                         </MenubarMenu>
                     )}
 
+                    {/* status */}
                     {status && (
                         <MenubarMenu>
                             <MenubarTrigger>Status</MenubarTrigger>
@@ -194,6 +210,7 @@ export function FilterToolbar({
                         </MenubarMenu>
                     )}
 
+                    {/* order */}
                     <MenubarMenu>
                         {order === 'asc' ? (
                             <MenubarTrigger onClick={() => setOrder('desc')}>
@@ -207,6 +224,7 @@ export function FilterToolbar({
                     </MenubarMenu>
                 </Menubar>
 
+                {/* clear filters */}
                 <Button
                     variant="outline"
                     onClick={handleClearFilters}>

@@ -9,6 +9,7 @@ export function ModeToggle({ className }: { className?: string }) {
 
     return (
         <DropdownMenu>
+            {/* dropdown menu trigger */}
             <DropdownMenuTrigger
                 asChild
                 className={className}>
@@ -20,6 +21,7 @@ export function ModeToggle({ className }: { className?: string }) {
                     <span className="sr-only">Toggle theme</span>
                 </Button>
             </DropdownMenuTrigger>
+            {/* dropdown menu content */}
             <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>

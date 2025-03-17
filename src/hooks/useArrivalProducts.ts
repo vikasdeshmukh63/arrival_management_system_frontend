@@ -3,15 +3,19 @@ import arrivalProductApi, { ItemInScanArea } from '@/lib/arrivalProducts'
 import { toast } from 'sonner'
 
 export const useArrivalProducts = (arrival_number: string) => {
+    // query client
     const queryClient = useQueryClient()
+
+    // query
     const { data, isLoading, isError } = useQuery({
         queryKey: ['arrivalProducts', arrival_number],
         queryFn: () => arrivalProductApi.getArrivalProducts(arrival_number),
         enabled: !!arrival_number,
-        staleTime: 0, // Disable caching - data becomes stale immediately
-        gcTime: 0 // Remove inactive data immediately
+        staleTime: 0,
+        gcTime: 0
     })
 
+    // scan product
     const scanProduct = useMutation({
         mutationFn: ({ scanned_product }: { scanned_product: ItemInScanArea }) => arrivalProductApi.scanProduct(arrival_number, scanned_product),
         onSuccess: () => {
@@ -23,6 +27,7 @@ export const useArrivalProducts = (arrival_number: string) => {
         }
     })
 
+    // finish processing
     const finishProcessing = useMutation({
         mutationFn: () => arrivalProductApi.finishProcessing(arrival_number),
         onSuccess: () => {

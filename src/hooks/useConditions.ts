@@ -3,7 +3,10 @@ import conditionApi, { ConditionQueryParams, CreateCondition } from '@/lib/condi
 import { toast } from 'sonner'
 
 export const useConditions = (params?: ConditionQueryParams) => {
+    // query client
     const queryClient = useQueryClient()
+
+    // query
     const { data, isLoading, isError } = useQuery({
         queryKey: ['conditions', params],
         queryFn: () => conditionApi.getConditions(params),
@@ -11,6 +14,7 @@ export const useConditions = (params?: ConditionQueryParams) => {
         gcTime: 1000 * 60 * 10
     })
 
+    // create condition
     const createConditionMutation = useMutation({
         mutationFn: (condition: CreateCondition) => conditionApi.createCondition(condition),
         onSuccess: async () => {
@@ -22,6 +26,7 @@ export const useConditions = (params?: ConditionQueryParams) => {
         }
     })
 
+    // update condition
     const updateConditionMutation = useMutation({
         mutationFn: ({ condition_id, condition }: { condition_id: number; condition: CreateCondition }) =>
             conditionApi.updateCondition(condition_id, condition),
@@ -34,6 +39,7 @@ export const useConditions = (params?: ConditionQueryParams) => {
         }
     })
 
+    // delete condition
     const deleteConditionMutation = useMutation({
         mutationFn: (condition_id: number) => conditionApi.deleteCondition(condition_id),
         onSuccess: async () => {

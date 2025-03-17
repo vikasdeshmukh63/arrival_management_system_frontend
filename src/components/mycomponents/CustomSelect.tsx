@@ -15,9 +15,11 @@ const CustomSelect = <T,>({ placeholder, data, onChange, value, getItemKey, getI
         <Select
             onValueChange={onChange}
             value={value.toString()}>
+            {/* select trigger */}
             <SelectTrigger className="w-full">
                 <SelectValue placeholder={placeholder} />
             </SelectTrigger>
+            {/* select content */}
             <SelectContent>
                 {data.map((item) => (
                     <SelectGroup key={getItemKey(item)}>

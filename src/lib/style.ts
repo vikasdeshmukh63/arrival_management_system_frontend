@@ -1,6 +1,7 @@
 import axiosInstance from './axios-instance'
 import { Pagination } from './products'
 
+// types
 export interface StyleQueryParams {
     order?: string
     search?: string
@@ -24,6 +25,7 @@ export interface CreateStyle {
     name: string
 }
 
+// style api
 export const styleApi = {
     getStyles: async (params?: StyleQueryParams): Promise<StyleResponse> => {
         const queryString = params

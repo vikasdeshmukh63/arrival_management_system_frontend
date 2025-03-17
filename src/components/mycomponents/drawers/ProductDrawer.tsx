@@ -22,6 +22,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import CustomSelect from '../CustomSelect'
 
+// product schema
 const productSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     brand_id: z.number().min(1, 'Brand is required'),
@@ -31,12 +32,15 @@ const productSchema = z.object({
     style_id: z.number().min(1, 'Style is required')
 })
 
+// product form data
 type ProductFormData = z.infer<typeof productSchema>
 
 const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () => void; data?: (CreateProduct & { tsku: string }) | null }) => {
+    // state
     const submitRef = useRef<HTMLButtonElement>(null)
     const isSubmittingRef = useRef(false)
 
+    // form
     const {
         register,
         handleSubmit,
@@ -47,6 +51,7 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
         resolver: zodResolver(productSchema)
     })
 
+    // hooks
     const { createProduct, isCreatingProduct, createProductError, updateProduct, isUpdatingProduct, updateProductError } = useProducts()
 
     const { data: categoryData } = useCategories() as { data: CategoryResponse | undefined }
@@ -59,6 +64,7 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
 
     const { data: styleData } = useStyles() as { data: StyleResponse | undefined }
 
+    // reset form and close drawer
     useEffect(() => {
         if (isSubmittingRef.current && !isCreatingProduct) {
             if (!createProductError) {
@@ -69,6 +75,7 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
         }
     }, [isCreatingProduct, createProductError, onClose, reset])
 
+    // on submit
     const onSubmit = async (formData: ProductFormData) => {
         try {
             isSubmittingRef.current = true
@@ -88,13 +95,16 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
             open={isOpen}
             onOpenChange={onClose}>
             <SheetContent className="px-4">
+                {/* sheet header */}
                 <SheetHeader>
                     <SheetTitle>{data ? 'Update' : 'Add'} Product</SheetTitle>
                 </SheetHeader>
+                {/* sheet content */}
                 <div className="w-full">
                     <form
                         className="w-full border p-4 rounded-md flex flex-col gap-4"
                         onSubmit={handleSubmit(onSubmit)}>
+                        {/* name */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="name">Name</Label>
                             <Input
@@ -106,7 +116,7 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
                             />
                             {errors.name && <span className="text-xs text-red-500">{errors.name.message}</span>}
                         </div>
-
+                        {/* category */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="category">Category</Label>
                             <Controller
@@ -126,7 +136,7 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
                             />
                             {errors.category_id && <span className="text-xs text-red-500">{errors.category_id.message}</span>}
                         </div>
-
+                        {/* brand */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="brand">Brand</Label>
                             <Controller
@@ -146,7 +156,7 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
                             />
                             {errors.brand_id && <span className="text-xs text-red-500">{errors.brand_id.message}</span>}
                         </div>
-
+                        {/* size */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="size">Size</Label>
                             <Controller
@@ -166,7 +176,7 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
                             />
                             {errors.size_id && <span className="text-xs text-red-500">{errors.size_id.message}</span>}
                         </div>
-
+                        {/* color */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="color">Color</Label>
                             <Controller
@@ -186,7 +196,7 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
                             />
                             {errors.color_id && <span className="text-xs text-red-500">{errors.color_id.message}</span>}
                         </div>
-
+                        {/* style */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="style">Style</Label>
                             <Controller
@@ -206,6 +216,7 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
                             />
                             {errors.style_id && <span className="text-xs text-red-500">{errors.style_id.message}</span>}
                         </div>
+                        {/* submit button */}
                         <button
                             type="submit"
                             className="hidden"
@@ -213,12 +224,14 @@ const ProductDrawer = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: ()
                         />
                     </form>
                 </div>
+                {/* error */}
                 {createProductError && createProductError instanceof AxiosError && (
                     <span className="text-xs text-red-500">{createProductError.response?.data.message}</span>
                 )}
                 {updateProductError && updateProductError instanceof AxiosError && (
                     <span className="text-xs text-red-500">{updateProductError.response?.data.message}</span>
                 )}
+                {/* sheet footer */}
                 <SheetFooter>
                     <Button onClick={() => submitRef.current?.click()}>
                         {isCreatingProduct || isUpdatingProduct ? <Loader className="animate-spin" /> : `${data ? 'Update' : 'Create'} Product`}

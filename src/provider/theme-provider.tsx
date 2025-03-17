@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
+// types
 type Theme = 'dark' | 'light' | 'system'
 
 type ThemeProviderProps = {
@@ -13,16 +14,20 @@ type ThemeProviderState = {
     setTheme: (theme: Theme) => void
 }
 
+// initial state
 const initialState: ThemeProviderState = {
     theme: 'system',
     setTheme: () => null
 }
 
+// create context
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
 export function ThemeProvider({ children, defaultTheme = 'system', storageKey = 'vite-ui-theme', ...props }: ThemeProviderProps) {
+    // state
     const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem(storageKey) as Theme) || defaultTheme)
 
+    // use effect
     useEffect(() => {
         const root = window.document.documentElement
 
@@ -38,6 +43,7 @@ export function ThemeProvider({ children, defaultTheme = 'system', storageKey = 
         root.classList.add(theme)
     }, [theme])
 
+    // value
     const value = {
         theme,
         setTheme: (theme: Theme) => {
@@ -55,6 +61,7 @@ export function ThemeProvider({ children, defaultTheme = 'system', storageKey = 
     )
 }
 
+// use theme
 export const useTheme = () => {
     const context = useContext(ThemeProviderContext)
 

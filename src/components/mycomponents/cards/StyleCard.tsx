@@ -5,12 +5,14 @@ import { useState } from 'react'
 import DeleteModal from '../DeleteModal'
 
 const StyleCard = ({ style, handleOpenEditDrawer }: { style: Style; handleOpenEditDrawer: (style: Style) => void }) => {
+    // state
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
 
     return (
         <Card className="relative">
+            {/* card header */}
             <CardHeader>{style.name}</CardHeader>
-
+            {/* card footer */}
             <CardFooter className="flex justify-between items-center">
                 <Button
                     variant="outline"
@@ -24,7 +26,7 @@ const StyleCard = ({ style, handleOpenEditDrawer }: { style: Style; handleOpenEd
                 </Button>
             </CardFooter>
 
-            {/* Delete Modal */}
+            {/* delete modal */}
             {openDeleteModal && (
                 <DeleteModal
                     open={openDeleteModal}

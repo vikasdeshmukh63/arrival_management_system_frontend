@@ -11,6 +11,7 @@ import { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+// start processing schema
 const startProcessingSchema = z.object({
     received_pallets: z
         .string()
@@ -33,6 +34,7 @@ const startProcessingSchema = z.object({
         .optional()
 })
 
+// start processing form data
 type StartProcessingFormData = z.infer<typeof startProcessingSchema>
 
 const StartProcessingDrawer = ({
@@ -44,9 +46,11 @@ const StartProcessingDrawer = ({
     onClose: () => void
     arrivalToStartProcessing: string | null
 }) => {
+    // state
     const submitRef = useRef<HTMLButtonElement>(null)
     const isSubmittingRef = useRef(false)
 
+    // form
     const {
         register,
         handleSubmit,
@@ -56,8 +60,10 @@ const StartProcessingDrawer = ({
         resolver: zodResolver(startProcessingSchema)
     })
 
+    // hooks
     const { startProcessing, isStartingProcessing, startProcessingError } = useArrivals()
 
+    // reset form and close drawer
     useEffect(() => {
         if (isSubmittingRef.current && !isStartingProcessing && !startProcessingError) {
             if (!startProcessingError) {
@@ -68,6 +74,7 @@ const StartProcessingDrawer = ({
         }
     }, [isStartingProcessing, startProcessingError, onClose, reset])
 
+    // on submit
     const onSubmit = async (formData: StartProcessingFormData) => {
         try {
             isSubmittingRef.current = true
@@ -100,13 +107,16 @@ const StartProcessingDrawer = ({
             open={isOpen}
             onOpenChange={onClose}>
             <SheetContent className="px-4">
+                {/* sheet header */}
                 <SheetHeader>
                     <SheetTitle>Start Processing</SheetTitle>
                 </SheetHeader>
+                {/* sheet content */}
                 <div className="w-full">
                     <form
                         className="w-full border p-4 rounded-md flex flex-col gap-4"
                         onSubmit={handleSubmit(onSubmit)}>
+                        {/* received boxes */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="received_boxes">Received Boxes</Label>
                             <Input
@@ -118,7 +128,7 @@ const StartProcessingDrawer = ({
                             />
                             {errors.received_boxes && <span className="text-xs text-red-500">{errors.received_boxes.message}</span>}
                         </div>
-
+                        {/* received pallets */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="received_pallets">Received Pallets</Label>
                             <Input
@@ -130,7 +140,7 @@ const StartProcessingDrawer = ({
                             />
                             {errors.received_pallets && <span className="text-xs text-red-500">{errors.received_pallets.message}</span>}
                         </div>
-
+                        {/* received pieces */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="received_pieces">Received Pieces</Label>
                             <Input
@@ -142,7 +152,7 @@ const StartProcessingDrawer = ({
                             />
                             {errors.received_pieces && <span className="text-xs text-red-500">{errors.received_pieces.message}</span>}
                         </div>
-
+                        {/* received kilograms */}
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="received_kilograms">Received Kilograms</Label>
                             <Input
@@ -154,7 +164,7 @@ const StartProcessingDrawer = ({
                             />
                             {errors.received_kilograms && <span className="text-xs text-red-500">{errors.received_kilograms.message}</span>}
                         </div>
-
+                        {/* submit button */}
                         <button
                             type="submit"
                             className="hidden"
@@ -162,9 +172,11 @@ const StartProcessingDrawer = ({
                         />
                     </form>
                 </div>
+                {/* error */}
                 {startProcessingError && startProcessingError instanceof AxiosError && (
                     <span className="text-xs text-red-500">{startProcessingError.response?.data.message}</span>
                 )}
+                {/* sheet footer */}
                 <SheetFooter>
                     <Button onClick={() => submitRef.current?.click()}>
                         {isStartingProcessing ? <Loader className="animate-spin" /> : 'Start Processing'}

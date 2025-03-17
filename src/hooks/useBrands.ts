@@ -3,7 +3,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 export const useBrands = (params?: BrandQueryParams) => {
+    // query client
     const queryClient = useQueryClient()
+
+    // query
     const { data, isLoading, isError } = useQuery({
         queryKey: ['brands', params],
         queryFn: () => brandApi.getBrands(params),
@@ -11,6 +14,7 @@ export const useBrands = (params?: BrandQueryParams) => {
         gcTime: 1000 * 60 * 10
     })
 
+    // create brand
     const createBrandMutation = useMutation({
         mutationFn: (brand: CreateBrand) => brandApi.createBrand(brand),
         onSuccess: async () => {
@@ -22,6 +26,7 @@ export const useBrands = (params?: BrandQueryParams) => {
         }
     })
 
+    // update brand
     const updateBrandMutation = useMutation({
         mutationFn: ({ brand_id, brand }: { brand_id: number; brand: CreateBrand }) => brandApi.updateBrand(brand_id, brand),
         onSuccess: async () => {
@@ -33,6 +38,7 @@ export const useBrands = (params?: BrandQueryParams) => {
         }
     })
 
+    // delete brand
     const deleteBrandMutation = useMutation({
         mutationFn: (brand_id: number) => brandApi.deleteBrand(brand_id),
         onSuccess: async () => {

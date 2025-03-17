@@ -3,7 +3,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 export const useColors = (params?: ColorQueryParams) => {
+    // query client
     const queryClient = useQueryClient()
+
+    // query
     const { data, isLoading, isError } = useQuery({
         queryKey: ['colors', params],
         queryFn: () => colorApi.getColors(params),
@@ -11,6 +14,7 @@ export const useColors = (params?: ColorQueryParams) => {
         gcTime: 1000 * 60 * 10
     })
 
+    // create color
     const createColorMutation = useMutation({
         mutationFn: (color: CreateColor) => colorApi.createColor(color),
         onSuccess: async () => {
@@ -22,6 +26,7 @@ export const useColors = (params?: ColorQueryParams) => {
         }
     })
 
+    // update color
     const updateColorMutation = useMutation({
         mutationFn: ({ color_id, color }: { color_id: number; color: CreateColor }) => colorApi.updateColor(color_id, color),
         onSuccess: async () => {
@@ -33,6 +38,7 @@ export const useColors = (params?: ColorQueryParams) => {
         }
     })
 
+    // delete color
     const deleteColorMutation = useMutation({
         mutationFn: (color_id: number) => colorApi.deleteColor(color_id),
         onSuccess: async () => {

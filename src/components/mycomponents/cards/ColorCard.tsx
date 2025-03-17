@@ -9,8 +9,10 @@ const ColorCard = ({ color, handleOpenEditDrawer }: { color: Color; handleOpenEd
 
     return (
         <Card className="relative">
+            {/* card header */}
             <CardHeader>{color.name}</CardHeader>
 
+            {/* card footer */}
             <CardFooter className="flex justify-between items-center">
                 <Button
                     variant="outline"
@@ -24,7 +26,7 @@ const ColorCard = ({ color, handleOpenEditDrawer }: { color: Color; handleOpenEd
                 </Button>
             </CardFooter>
 
-            {/* Delete Modal */}
+            {/* delete modal */}
             {openDeleteModal && (
                 <DeleteModal
                     open={openDeleteModal}

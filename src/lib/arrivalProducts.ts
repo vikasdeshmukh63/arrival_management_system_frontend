@@ -1,6 +1,7 @@
 import { ProductBrand, ProductCat, ProductColor, ProductSize, ProductStyle } from '@/lib/products'
 import axiosInstance from './axios-instance'
 
+// types
 export interface DetailedArrivalProduct {
     arrival_product_id: number
     arrival_id: number
@@ -56,6 +57,7 @@ export interface FinishProcessingResponse {
     }
 }
 
+// arrival product api
 const arrivalProductApi = {
     getArrivalProducts: async (arrival_number: string) => {
         const { data } = await axiosInstance.get(`/api/products/products-with-discrepancy/${arrival_number}`)

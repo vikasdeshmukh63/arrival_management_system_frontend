@@ -5,27 +5,35 @@ import { useState } from 'react'
 import DeleteModal from '../DeleteModal'
 
 const SupplierCard = ({ supplier, handleOpenEditDrawer }: { supplier: Supplier; handleOpenEditDrawer: (supplier: Supplier) => void }) => {
+    // state
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
 
     return (
         <Card className="relative">
+            {/* card header */}
             <CardHeader>{supplier.name}</CardHeader>
+            {/* card content */}
             <CardContent>
                 <div className="grid grid-cols-1 gap-2">
+                    {/* contact person */}
                     <p className="text-sm text-gray-500">
                         <span className="font-bold">Contact Person :</span> {supplier.contact_person}
                     </p>
+                    {/* phone */}
                     <p className="text-sm text-gray-500">
                         <span className="font-bold">Phone :</span> {supplier.phone}
                     </p>
+                    {/* email */}
                     <p className="text-sm text-gray-500">
                         <span className="font-bold">Email :</span> {supplier.email}
                     </p>
+                    {/* address */}
                     <p className="text-sm text-gray-500">
                         <span className="font-bold">Address :</span> {supplier.address}
                     </p>
                 </div>
             </CardContent>
+            {/* card footer */}
             <CardFooter className="flex justify-between items-center">
                 <Button
                     variant="outline"
@@ -39,7 +47,7 @@ const SupplierCard = ({ supplier, handleOpenEditDrawer }: { supplier: Supplier; 
                 </Button>
             </CardFooter>
 
-            {/* Delete Modal */}
+            {/* delete modal */}
             {openDeleteModal && (
                 <DeleteModal
                     open={openDeleteModal}

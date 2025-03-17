@@ -14,6 +14,7 @@ import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 import CustomSelect from './CustomSelect'
 
+// arrival schema
 const arrivalSchema = z.object({
     title: z.string().min(1, 'Title is required'),
     supplier_id: z.number().min(1, 'Supplier is required'),
@@ -40,6 +41,7 @@ const arrivalSchema = z.object({
     notes: z.string().optional()
 })
 
+// arrival form data
 type ArrivalFormData = z.infer<typeof arrivalSchema>
 
 const ArrivalForm = ({
@@ -51,8 +53,10 @@ const ArrivalForm = ({
     setSelectedTab: (tab: 'arrival' | 'products') => void
     onSuccess?: (arrival: CreateArrival & { arrival_number: string }) => void
 }) => {
+    // state
     const isSubmittingRef = useRef(false)
 
+    // form
     const {
         register,
         handleSubmit,
@@ -63,10 +67,12 @@ const ArrivalForm = ({
         resolver: zodResolver(arrivalSchema)
     })
 
+    // hooks
     const { createArrival, createArrivalError, isCreating, updateArrival, updateArrivalError, isUpdating } = useArrivals()
 
     const { data: supplierData } = useSupplier() as { data: SupplierResponse | undefined }
 
+    // reset form
     useEffect(() => {
         if (data) {
             // reset({
@@ -84,42 +90,45 @@ const ArrivalForm = ({
         }
     }, [data, reset])
 
+    // reset form and close drawer
     useEffect(() => {
-        // Only reset if we were submitting and there are no errors
         if (isSubmittingRef.current && !createArrivalError && !updateArrivalError && !isCreating) {
             reset()
             setSelectedTab('products')
             isSubmittingRef.current = false
         } else if ((createArrivalError || updateArrivalError) && isSubmittingRef.current) {
-            // If there was an error, just reset the submitting flag
             isSubmittingRef.current = false
         }
     }, [createArrivalError, updateArrivalError, isCreating, reset, setSelectedTab])
 
+    // on submit
     const onSubmit = async (formData: ArrivalFormData) => {
         try {
             isSubmittingRef.current = true
-            // Filter out undefined and empty optional fields
+            // filter out undefined and empty optional fields
             const cleanedFormData = Object.fromEntries(
                 Object.entries(formData).filter(([key, value]) => {
-                    // Keep required fields regardless of value
+                    // keep required fields regardless of value
                     if (['title', 'supplier_id', 'expected_boxes', 'expected_date'].includes(key)) {
                         return true
                     }
-                    // Filter out empty optional fields
+                    // filter out empty optional fields
                     return value !== undefined && value !== ''
                 })
             ) as unknown as ArrivalFormData
 
             if (!data) {
+                // create arrival
                 const result = await createArrival(cleanedFormData)
                 if (onSuccess && result) {
+                    // on success
                     onSuccess({
                         ...cleanedFormData,
                         arrival_number: (result as Arrival).arrival_number
                     })
                 }
             } else {
+                // update arrival
                 await updateArrival({ arrival_number: data.arrival_number, arrival: cleanedFormData })
             }
         } catch (error) {
@@ -132,6 +141,7 @@ const ArrivalForm = ({
             <form
                 className="w-full border p-4 rounded-md flex flex-col gap-4"
                 onSubmit={handleSubmit(onSubmit)}>
+                {/* title */}
                 <div className="flex flex-col gap-2">
                     <Label htmlFor="title">Title</Label>
                     <Input
@@ -143,7 +153,7 @@ const ArrivalForm = ({
                     />
                     {errors.title && <span className="text-xs text-red-500">{errors.title.message}</span>}
                 </div>
-
+                {/* supplier */}
                 <div className="flex flex-col gap-2">
                     <Label htmlFor="supplier_id">Supplier</Label>
                     <Controller
@@ -163,7 +173,7 @@ const ArrivalForm = ({
                     />
                     {errors.supplier_id && <span className="text-xs text-red-500">{errors.supplier_id.message}</span>}
                 </div>
-
+                {/* expected boxes */}
                 <div className="flex flex-col gap-2">
                     <Label htmlFor="expected_boxes">Expected Boxes</Label>
                     <Input
@@ -175,7 +185,7 @@ const ArrivalForm = ({
                     />
                     {errors.expected_boxes && <span className="text-xs text-red-500">{errors.expected_boxes.message}</span>}
                 </div>
-
+                {/* expected kilograms */}
                 <div className="flex flex-col gap-2">
                     <Label htmlFor="expected_kilograms">Expected Kilograms</Label>
                     <Input
@@ -187,7 +197,7 @@ const ArrivalForm = ({
                     />
                     {errors.expected_kilograms && <span className="text-xs text-red-500">{errors.expected_kilograms.message}</span>}
                 </div>
-
+                {/* expected pallets */}
                 <div className="flex flex-col gap-2">
                     <Label htmlFor="expected_pallets">Expected Pallets</Label>
                     <Input
@@ -199,7 +209,7 @@ const ArrivalForm = ({
                     />
                     {errors.expected_pallets && <span className="text-xs text-red-500">{errors.expected_pallets.message}</span>}
                 </div>
-
+                {/* expected pieces */}
                 <div className="flex flex-col gap-2">
                     <Label htmlFor="expected_pieces">Expected Pieces</Label>
                     <Input
@@ -211,7 +221,7 @@ const ArrivalForm = ({
                     />
                     {errors.expected_pieces && <span className="text-xs text-red-500">{errors.expected_pieces.message}</span>}
                 </div>
-
+                {/* expected date */}
                 <div className="flex flex-col gap-2">
                     <Label htmlFor="expected_date">Expected Date</Label>
                     <Input
@@ -223,7 +233,7 @@ const ArrivalForm = ({
                     />
                     {errors.expected_date && <span className="text-xs text-red-500">{errors.expected_date.message}</span>}
                 </div>
-
+                {/* notes */}
                 <div className="flex flex-col gap-2">
                     <Label htmlFor="notes">Notes</Label>
                     <Textarea
@@ -234,7 +244,7 @@ const ArrivalForm = ({
                     />
                     {errors.notes && <span className="text-xs text-red-500">{errors.notes.message}</span>}
                 </div>
-
+                {/* submit button */}
                 <Button
                     type="submit"
                     className="w-full"
@@ -242,6 +252,7 @@ const ArrivalForm = ({
                     {isCreating || isUpdating ? <Loader className="animate-spin" /> : 'Submit'}
                 </Button>
             </form>
+            {/* error */}
             {createArrivalError && createArrivalError instanceof AxiosError && (
                 <span className="text-xs text-red-500">{createArrivalError.response?.data.message}</span>
             )}
