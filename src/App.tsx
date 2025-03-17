@@ -169,14 +169,6 @@ function App() {
                                     </PrivateRoute>
                                 }
                             />
-                            <Route
-                                path="/arrivals/:arrival_number"
-                                element={
-                                    <PrivateRoute>
-                                        <IndividualArrival />
-                                    </PrivateRoute>
-                                }
-                            />
                             {/* Catch all route - redirect to home */}
                             <Route
                                 path="*"

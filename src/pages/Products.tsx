@@ -13,10 +13,14 @@ import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
 const Products = () => {
+    // search params
     const [searchParams] = useSearchParams()
+
+    // state
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const [productToEdit, setProductToEdit] = useState<(CreateProduct & { tsku: string }) | null>(null)
 
+    // hooks
     const { data, isLoading, isError } = useProducts({
         page: parseInt(searchParams.get('page') || '1'),
         itemsPerPage: parseInt(searchParams.get('itemsPerPage') || '10'),
@@ -29,17 +33,20 @@ const Products = () => {
         order: searchParams.get('order') || undefined
     })
 
+    // if there is an error, show a toast
     useEffect(() => {
         if (isError) {
             toast.error('Error fetching products')
         }
     }, [isError])
 
+    // handle open create drawer
     const handleOpenCreateDrawer = () => {
         setIsDrawerOpen(true)
         setProductToEdit(null)
     }
 
+    // handle open edit drawer
     const handleOpenEditDrawer = (product: Product) => {
         const productToEdit: CreateProduct & { tsku: string } = {
             name: product.name,
@@ -56,11 +63,11 @@ const Products = () => {
 
     return (
         <Layout>
-            {/* Use flex-col and min-h-full to ensure full height */}
             <div className="flex flex-col min-h-full">
-                {/* Main content area with padding and auto height */}
                 <div className="flex-1 p-2 sm:p-4 overflow-y-auto">
+                    {/* main content */}
                     <div className="flex flex-col gap-4 w-full max-w-[2000px] mx-auto">
+                        {/* page header */}
                         <PageHeader
                             title="Products"
                             description="Manage your products here"
@@ -77,10 +84,11 @@ const Products = () => {
                             }
                         />
 
-                        {/* Show loading state while data is being fetched */}
+                        {/* loading state */}
                         {isLoading ? (
                             <LoaderComponent />
                         ) : data && data.items && data.items.length > 0 ? (
+                            // products
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4">
                                 {data.items.map((product: Product) => (
                                     <ProductCard
@@ -91,12 +99,13 @@ const Products = () => {
                                 ))}
                             </div>
                         ) : (
+                            // no data
                             <NoData item="products" />
                         )}
                     </div>
                 </div>
 
-                {/* Pagination fixed at the bottom */}
+                {/* pagination */}
                 {data && data.pagination && (
                     <div className="p-2 sm:p-4 border-t border-gray-200 dark:border-gray-800 bg-background">
                         <CustomPagination pagination={data.pagination} />
@@ -104,7 +113,7 @@ const Products = () => {
                 )}
             </div>
 
-            {/* Product Drawer */}
+            {/* product drawer */}
             {isDrawerOpen && (
                 <ProductDrawer
                     isOpen={isDrawerOpen}

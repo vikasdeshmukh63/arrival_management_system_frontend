@@ -15,13 +15,17 @@ import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
 const Arrivals = () => {
+    // search params
     const [searchParams] = useSearchParams()
+
+    // state
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const [arrivalToEdit, setArrivalToEdit] = useState<(CreateArrival & { arrival_number: string }) | null>(null)
     const [createdArrival, setCreatedArrival] = useState<(CreateArrival & { arrival_number: string }) | null>(null)
     const [startProcessingDrawerOpen, setStartProcessingDrawerOpen] = useState(false)
     const [arrivalToStartProcessing, setArrivalToStartProcessing] = useState<string | null>(null)
 
+    // hooks
     const { data, isLoading, isError } = useArrivals({
         page: parseInt(searchParams.get('page') || '1'),
         itemsPerPage: parseInt(searchParams.get('itemsPerPage') || '10'),
@@ -31,17 +35,20 @@ const Arrivals = () => {
         ne: searchParams.get('ne') || undefined
     })
 
+    // if there is an error, show a toast
     useEffect(() => {
         if (isError) {
             toast.error('Error fetching brands')
         }
     }, [isError])
 
+    // handle open create drawer
     const handleOpenCreateDrawer = () => {
         setIsDrawerOpen(true)
         setArrivalToEdit(null)
     }
 
+    // handle open edit drawer
     const handleOpenEditDrawer = (arrival: Arrival) => {
         const arrivalToEdit: CreateArrival & { arrival_number: string } = {
             title: arrival.title,
@@ -65,11 +72,11 @@ const Arrivals = () => {
 
     return (
         <Layout>
-            {/* Use flex-col and min-h-full to ensure full height */}
             <div className="flex flex-col min-h-full">
-                {/* Main content area with padding and auto height */}
                 <div className="flex-1 p-2 sm:p-4 overflow-y-auto">
+                    {/* main content */}
                     <div className="flex flex-col gap-4 w-full max-w-[2000px] mx-auto">
+                        {/* page header */}
                         <PageHeader
                             title="Arrivals"
                             description="Manage your arrivals here"
@@ -78,10 +85,11 @@ const Arrivals = () => {
                             filters={<FilterToolbar status={true} />}
                         />
 
-                        {/* Show loading state while data is being fetched */}
+                        {/* loading state */}
                         {isLoading ? (
                             <LoaderComponent />
                         ) : data && data.items && data.items.length > 0 ? (
+                            // arrivals
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4">
                                 {data.items.map((arrival: Arrival) => (
                                     <ArrivalCard
@@ -95,12 +103,13 @@ const Arrivals = () => {
                                 ))}
                             </div>
                         ) : (
+                            // no data
                             <NoData item="arrivals" />
                         )}
                     </div>
                 </div>
 
-                {/* Pagination fixed at the bottom */}
+                {/* pagination */}
                 {data && data.pagination && (
                     <div className="p-2 sm:p-4 border-t border-gray-200 dark:border-gray-800 bg-background">
                         <CustomPagination pagination={data.pagination} />
@@ -108,7 +117,7 @@ const Arrivals = () => {
                 )}
             </div>
 
-            {/* Product Drawer */}
+            {/* arrival drawer */}
             {isDrawerOpen && (
                 <ArrivalDrawer
                     isOpen={isDrawerOpen}
@@ -119,6 +128,7 @@ const Arrivals = () => {
                 />
             )}
 
+            {/* start processing drawer */}
             {startProcessingDrawerOpen && (
                 <StartProcessingDrawer
                     isOpen={startProcessingDrawerOpen}

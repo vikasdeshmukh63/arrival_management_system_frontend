@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
+// schema
 const registerSchema = z
     .object({
         name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -24,12 +25,18 @@ const registerSchema = z
         path: ['confirmPassword']
     })
 
+// type
 type RegisterFormData = z.infer<typeof registerSchema>
 
 const Register = () => {
+    // state
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+    // hooks
     const { register: registerMutation, isRegistering, registerError } = useAuth()
+
+    // form
     const {
         register,
         handleSubmit,
@@ -38,6 +45,7 @@ const Register = () => {
         resolver: zodResolver(registerSchema)
     })
 
+    // submit
     const onSubmit = async (data: RegisterFormData) => {
         try {
             registerMutation(data)
@@ -48,16 +56,21 @@ const Register = () => {
 
     return (
         <div className="flex items-center justify-center h-screen relative">
+            {/* logo */}
             <Logo />
+            {/* mode toggle */}
             <ModeToggle className="absolute top-4 right-4" />
             {/* left  */}
             <div className="w-full md:w-1/2 h-full p-4 md:p-10 flex flex-col items-center justify-center">
+                {/* title */}
                 <h1 className="text-3xl md:text-4xl font-bold mb-2">Register</h1>
+                {/* description */}
                 <p className="text-sm text-gray-500 mb-4">Create your account</p>
                 {/* register card */}
                 <form
                     className="flex flex-col gap-3 w-full max-w-md md:w-2/4 border border-gray-300 rounded-lg p-4"
                     onSubmit={handleSubmit(onSubmit)}>
+                    {/* register error */}
                     {registerError && (
                         <div className="text-sm text-red-500 mb-2">
                             {registerError instanceof Error ? registerError.message : 'Registration failed'}

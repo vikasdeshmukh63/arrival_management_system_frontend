@@ -4,6 +4,7 @@ import Layout from '@/components/mycomponents/wrappers/Layout'
 import { useCounts } from '@/hooks/useCounts'
 import { CircleSlash2, Loader, Package, PackageSearch, Truck, Users2 } from 'lucide-react'
 
+// cards
 const cards = (
     totalArrivals: number,
     inProgressArrivals: number,
@@ -53,9 +54,10 @@ const cards = (
 }
 
 const Dashboard = () => {
+    // hooks
     const { arrivalCounts, entitiesCount, isLoading } = useCounts()
 
-    // Show loading state while data is being fetched
+    // loading state
     if (isLoading) {
         return (
             <Layout>
@@ -66,6 +68,7 @@ const Dashboard = () => {
         )
     }
 
+    // cards
     const cardItems = cards(
         arrivalCounts?.total ?? 0,
         arrivalCounts?.in_progress ?? 0,
@@ -78,6 +81,7 @@ const Dashboard = () => {
     return (
         <Layout>
             <div className="flex flex-col gap-4 p-2 sm:p-4 w-full h-full max-w-[2000px] mx-auto">
+                {/* page header */}
                 <div className="flex flex-col gap-2">
                     <h1 className="text-xl sm:text-2xl font-bold">Dashboard</h1>
                     <p className="text-sm sm:text-base text-gray-500">Welcome to your logistics dashboard</p>
@@ -91,7 +95,7 @@ const Dashboard = () => {
                         />
                     ))}
                 </div>
-
+                {/* arrival chart */}
                 <div className="w-full">
                     <ArrivalChart
                         title="Arrivals"
