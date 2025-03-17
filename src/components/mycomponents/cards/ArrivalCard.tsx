@@ -1,14 +1,15 @@
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { EArrivalStatus } from "@/constants/constants"
-import { Arrival, CreateArrival } from "@/lib/arrivals"
-import { Product } from "@/lib/products"
-import { useMemo, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import DeleteModal from "../DeleteModal"
-
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import { EArrivalStatus } from '@/constants/constants'
+import { Arrival, CreateArrival } from '@/lib/arrivals'
+import { Product } from '@/lib/products'
+import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import DeleteModal from '../DeleteModal'
+import { Info } from 'lucide-react'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 const formatDate = (date: string | null) => {
     if (!date) return 'N/A'
@@ -186,6 +187,33 @@ const ArrivalCard = ({
                     onClick={() => setOpenDeleteModal(true)}>
                     Delete
                 </Button>
+                <Tooltip>
+                    <TooltipTrigger>
+                        <Button
+                            variant="outline"
+                            className="w-fit">
+                            <Info className="w-4 h-4 text-gray-500" />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>
+                            <span className="font-bold">expected pallets : </span>
+                            {arrival.expected_pallets || 0}
+                        </p>
+                        <p>
+                            <span className="font-bold">expected boxes : </span>
+                            {arrival.expected_boxes || 0}
+                        </p>
+                        <p>
+                            <span className="font-bold">expected pieces : </span>
+                            {arrival.expected_pieces || 0}
+                        </p>
+                        <p>
+                            <span className="font-bold">expected kilograms : </span>
+                            {arrival.expected_kilograms || 0}
+                        </p>
+                    </TooltipContent>
+                </Tooltip>
             </CardFooter>
 
             {/* Delete Modal */}

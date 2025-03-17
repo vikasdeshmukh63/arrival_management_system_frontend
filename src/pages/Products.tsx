@@ -68,11 +68,11 @@ const Products = () => {
                             onAction={handleOpenCreateDrawer}
                             filters={
                                 <FilterToolbar
-                                    enableBrands={false}
-                                    enableColors={false}
-                                    enableSizes={false}
-                                    enableStyles={false}
-                                    enableCategories={false}
+                                    enableBrands={true}
+                                    enableColors={true}
+                                    enableSizes={true}
+                                    enableStyles={true}
+                                    enableCategories={true}
                                 />
                             }
                         />
