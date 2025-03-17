@@ -59,7 +59,9 @@ export const styleApi = {
         return data.data
     },
     deleteManyStyles: async (style_ids: number[]) => {
-        const { data } = await axiosInstance.delete('/api/styles/delete-many', { data: { ids: style_ids } })
+        const { data } = await axiosInstance.delete('/api/styles/delete-many', {
+            data: { ids: style_ids }
+        })
         return data.data
     }
 }

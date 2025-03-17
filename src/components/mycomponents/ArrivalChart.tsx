@@ -4,18 +4,18 @@ import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '
 
 // chart data
 const chartData = [
-    { month: 'January', upcoming: 10, inProgress: 8, finished: 7, withDiscrepancy: 6 },
-    { month: 'February', upcoming: 2, inProgress: 0, finished: 8, withDiscrepancy: 2 },
-    { month: 'March', upcoming: 7, inProgress: 1, finished: 2, withDiscrepancy: 1 },
-    { month: 'April', upcoming: 3, inProgress: 10, finished: 2, withDiscrepancy: 4 },
-    { month: 'May', upcoming: 4, inProgress: 14, finished: 3, withDiscrepancy: 0 },
-    { month: 'June', upcoming: 2, inProgress: 2, finished: 5, withDiscrepancy: 6 },
-    { month: 'July', upcoming: 2, inProgress: 2, finished: 5, withDiscrepancy: 6 },
-    { month: 'August', upcoming: 2, inProgress: 2, finished: 5, withDiscrepancy: 6 },
-    { month: 'September', upcoming: 2, inProgress: 2, finished: 5, withDiscrepancy: 6 },
-    { month: 'October', upcoming: 2, inProgress: 2, finished: 5, withDiscrepancy: 6 },
-    { month: 'November', upcoming: 2, inProgress: 2, finished: 5, withDiscrepancy: 6 },
-    { month: 'December', upcoming: 2, inProgress: 2, finished: 5, withDiscrepancy: 6 }
+    { month: 'January', upcoming: 7, inProgress: 3, finished: 9, withDiscrepancy: 2 },
+    { month: 'February', upcoming: 4, inProgress: 8, finished: 5, withDiscrepancy: 1 },
+    { month: 'March', upcoming: 9, inProgress: 2, finished: 6, withDiscrepancy: 4 },
+    { month: 'April', upcoming: 1, inProgress: 7, finished: 3, withDiscrepancy: 8 },
+    { month: 'May', upcoming: 6, inProgress: 9, finished: 0, withDiscrepancy: 5 },
+    { month: 'June', upcoming: 3, inProgress: 5, finished: 8, withDiscrepancy: 7 },
+    { month: 'July', upcoming: 8, inProgress: 1, finished: 4, withDiscrepancy: 9 },
+    { month: 'August', upcoming: 2, inProgress: 6, finished: 10, withDiscrepancy: 3 },
+    { month: 'September', upcoming: 5, inProgress: 10, finished: 2, withDiscrepancy: 6 },
+    { month: 'October', upcoming: 10, inProgress: 4, finished: 7, withDiscrepancy: 0 },
+    { month: 'November', upcoming: 0, inProgress: 8, finished: 3, withDiscrepancy: 10 },
+    { month: 'December', upcoming: 7, inProgress: 2, finished: 9, withDiscrepancy: 4 }
 ]
 
 // chart config

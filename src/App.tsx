@@ -26,7 +26,6 @@ import Styles from './pages/Styles'
 import Suppliers from './pages/Suppliers'
 import Logout from './pages/Logout'
 import Processing from './pages/Processing'
-import IndividualArrival from './pages/IndividualArrival'
 const queryClient = new QueryClient()
 
 function App() {

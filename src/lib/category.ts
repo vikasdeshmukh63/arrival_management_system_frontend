@@ -61,7 +61,9 @@ export const categoryApi = {
         return response.data
     },
     deleteManyCategories: async (category_ids: number[]) => {
-        const { data: response } = await axiosInstance.delete('/api/categories/delete-many', { data: { ids: category_ids } })
+        const { data: response } = await axiosInstance.delete('/api/categories/delete-many', {
+            data: { ids: category_ids }
+        })
         return response.data
     }
 }

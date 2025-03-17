@@ -2,7 +2,7 @@ import { categoryApi, CategoryQueryParams, CreateCategory } from '@/lib/category
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-export const useCategories = (params?: CategoryQueryParams) => {    
+export const useCategories = (params?: CategoryQueryParams) => {
     // query client
     const queryClient = useQueryClient()
     const { data, isLoading, isError } = useQuery({

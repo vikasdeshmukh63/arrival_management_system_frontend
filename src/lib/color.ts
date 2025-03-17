@@ -59,7 +59,9 @@ export const colorApi = {
         return data.data
     },
     deleteManyColors: async (color_ids: number[]) => {
-        const { data } = await axiosInstance.delete(`/api/colors/delete-many`, { data: { ids: color_ids } })
+        const { data } = await axiosInstance.delete(`/api/colors/delete-many`, {
+            data: { ids: color_ids }
+        })
         return data.data
     }
 }

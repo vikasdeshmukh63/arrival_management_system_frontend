@@ -14,5 +14,9 @@ export const useCounts = () => {
         queryFn: countApi.getEntitesCount
     })
 
-    return { arrivalCounts, entitiesCount, isLoading: isLoadingArrivalCounts || isLoadingEntitiesCount }
+    return {
+        arrivalCounts,
+        entitiesCount,
+        isLoading: isLoadingArrivalCounts || isLoadingEntitiesCount
+    }
 }
